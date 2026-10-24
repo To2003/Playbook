@@ -137,7 +137,7 @@ export default function QueArmamos() {
         <details className="group rounded-card bg-surface">
           <summary className="flex h-14 cursor-pointer list-none items-center justify-between px-4 text-body font-semibold [&::-webkit-details-marker]:hidden">
             Más opciones
-            <IconoSeguir tam={20} className="text-ink-faint transition-transform duration-200 group-open:rotate-90" />
+            <IconoSeguir tam={20} className="text-ink-faint transition-transform duration-200 ease-[var(--ease-out)] group-open:rotate-90 motion-reduce:transition-none" />
           </summary>
           <div className="flex flex-col gap-5 px-4 pb-4">
             <fieldset>

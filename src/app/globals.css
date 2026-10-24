@@ -219,9 +219,10 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
+  /* Menos movimiento, no cero: se va el achique al apretar, queda el cambio de color. */
   .pressable,
   .pressable:active {
-    transition: none;
     transform: none;
+    transition-property: background-color;
   }
 }

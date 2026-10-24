@@ -81,7 +81,7 @@ function Forma({ elemento, rad, girada }: { elemento: Elemento; rad: number; gir
       return <circle r={rad * 0.4} fill="#ffffff" stroke="var(--keeper-edge)" strokeWidth={rad * 0.1} />;
     case "cono": {
       const t = rad * 0.62;
-      return <path d={`M0 ${-t}L${t * 0.95} ${t * 0.7}L${-t * 0.95} ${t * 0.7}Z`} fill="var(--cone)" />;
+      return <path d={`M0 ${-t}L${t * 0.95} ${t * 0.7}L${-t * 0.95} ${t * 0.7}Z`} fill="var(--cone)" transform={girada ? "rotate(90)" : undefined} />;
     }
     case "valla":
       return <rect x={-rad * 0.18} y={-rad * 1.2} width={rad * 0.36} height={rad * 2.4} fill="var(--wildcard)" {...BORDE} strokeWidth={rad * 0.06} />;

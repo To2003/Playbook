@@ -23,12 +23,14 @@ export interface PropsPizarraSVG {
   className?: string;
   titulo?: string;
   svgRef?: Ref<SVGSVGElement>;
+  /** Prefijo único para los ids de las máscaras (varias pizarras en la misma pantalla). */
+  idBase?: string;
 }
 
 // Las zonas van abajo de todo; la bocha arriba de los jugadores.
 const capa = (e: Elemento) => (e.tipo === "zona" ? 0 : e.tipo === "bocha" ? 3 : e.tipo === "jugador" || e.tipo === "arquero" ? 2 : 1);
 
-export function PizarraSVG({ pizarra, aspecto, altoContraste = false, modo = "final", className, titulo, svgRef }: PropsPizarraSVG) {
+export function PizarraSVG({ pizarra, aspecto, altoContraste = false, modo = "final", className, titulo, svgRef, idBase = "pz" }: PropsPizarraSVG) {
   const orientacion = orientacionDe(pizarra.vista);
   const rad = RADIO_FICHA[pizarra.vista];
   const grosor = GROSOR_TIZA[pizarra.vista] * (altoContraste ? 1.4 : 1);
@@ -61,12 +63,21 @@ export function PizarraSVG({ pizarra, aspecto, altoContraste = false, modo = "fi
           {pizarra.pasos.map((p, ip) =>
             p.trazos.map((t, it) => {
               const { d, punta } = dibujoTrazo(t, rad);
+              const ancho = t.tipo === "tiro" ? grosorTrazo * 2 : grosorTrazo;
+              // Para animar, cada trazo se revela con una máscara: funciona igual en líneas sólidas, punteadas y onduladas.
+              const mascara = modo === "inicio" ? `${idBase}-m-${ip}-${it}` : undefined;
               return (
                 <g key={`${ip}-${it}`} data-trazo={`${ip}-${it}`} data-paso={ip}>
+                  {mascara && (
+                    <mask id={mascara} maskUnits="userSpaceOnUse" x={-30} y={-30} width={152} height={115}>
+                      <path d={d} stroke="#fff" strokeWidth={ancho * 3} fill="none" strokeLinecap="butt" data-revela="" />
+                    </mask>
+                  )}
                   <path
                     d={d}
-                    strokeWidth={t.tipo === "tiro" ? grosorTrazo * 2 : grosorTrazo}
+                    strokeWidth={ancho}
                     strokeDasharray={t.tipo === "pase" ? `${grosorTrazo * 2.2} ${grosorTrazo * 2.4}` : undefined}
+                    mask={mascara ? `url(#${mascara})` : undefined}
                   />
                   <path d={punta} fill="var(--chalk)" stroke="none" data-punta="" />
                 </g>
