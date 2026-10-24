@@ -216,7 +216,15 @@ export default function SesionGenerada() {
           >
             {guardadoOk || sesion.guardada ? "Guardada" : "Guardar para después"}
           </button>
-          <button type="button" onClick={() => router.push(`/cancha?id=${sesion.id}`)} className="pressable btn-primary flex h-16 items-center justify-center text-title">
+          <button
+            type="button"
+            onClick={() => {
+              // Pantalla completa en el mismo toque (el navegador lo exige); si no se puede, sigue igual.
+              void document.documentElement.requestFullscreen?.().catch(() => {});
+              router.push(`/cancha?id=${sesion.id}`);
+            }}
+            className="pressable btn-primary flex h-16 items-center justify-center text-title"
+          >
             ¡A la cancha!
           </button>
         </div>

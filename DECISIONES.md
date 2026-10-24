@@ -20,3 +20,6 @@ Formato: **qué** · por qué · alternativa descartada.
 16. **Grupos de k con resto mayor que la cantidad de grupos** (por ejemplo, 7 en grupos de 4): se arma un grupo más y se reparten parejos (4 y 3), en lugar de un grupo de 7.
 17. **Estaciones:** se arman cuando el grupo supera el máximo del ejercicio, en todos los formatos menos superioridad, que se resuelve con células y los que rotan.
 18. **Momento 2:** la división que se muestra es la del juego aplicado (o la del principal si no hay aplicado), porque es la que más se ve en la cancha.
+19. **El cronómetro se calcula contra el reloj (`finEn`)**, no contando ticks: si la pantalla se apaga o el navegador congela la pestaña, al volver el tiempo es el correcto. El progreso se guarda en `localStorage` (es una comodidad por dispositivo: si se pierde, el bloque arranca de cero).
+20. **Al llegar a cero no se pasa solo al bloque siguiente:** aparece "¡Tiempo!" con el botón "Siguiente" grande, que muestra el nombre del que viene. El entrenador decide cuándo, porque en la cancha nunca se corta justo a tiempo. También hay un "Repetir".
+21. **Pantalla completa:** se pide en el mismo toque de "¡A la cancha!" (el navegador lo exige así). Si no se puede (en iOS Safari, por ejemplo), sigue igual.
