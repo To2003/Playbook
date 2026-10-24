@@ -5,7 +5,7 @@
 > Al cerrar cada módulo: lint + typecheck + test en verde, capturas a 390 px en `capturas/<modulo>/`, review de animaciones si hay movimiento, commit y `playbook.bundle` (no hay repo remoto, ver REPORTE).
 
 - [x] **M0.** Cambios de la sección 1 (hidratación, modo sol, pantalla 2, contraste de fichas). Repo.
-- [ ] **M1.** Base: tipos del prompt, Archivo local, Dexie (`ejercicios`, `sesiones`, `ajustes`), Serwist, layout mobile, tema oscuro.
+- [x] **M1.** Base: tipos del prompt, Archivo local, Dexie (`ejercicios`, `sesiones`, `ajustes`), Serwist, layout mobile, tema oscuro.
 - [ ] **M2.** Tipos + biblioteca semilla 20 ejercicios + 4 tareas de arquero + validador que rompe el build.
 - [ ] **M3.** Pizarra: render + reproductor (play/pausa, velocidad, loop, pasos), MotionPath, stroke-dashoffset, IntersectionObserver, reduced motion.
 - [ ] **M4.** Motor de generación + tests de la sección 5 + flujo de 3 pantallas con momentos firma 1, 2 y 3.

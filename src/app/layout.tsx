@@ -1,11 +1,13 @@
 import type { Metadata, Viewport } from "next";
-import { Archivo } from "next/font/google";
+import localFont from "next/font/local";
 import "./globals.css";
+import { Proveedores } from "@/components/Proveedores";
 
-const archivo = Archivo({
+// Archivo variable (ejes wdth 62–125 y wght 100–900), servida desde la app: anda sin señal.
+const archivo = localFont({
+  src: "../fuentes/archivo-latin-wdth.woff2",
   variable: "--font-archivo",
-  subsets: ["latin"],
-  axes: ["wdth"],
+  weight: "100 900",
   display: "swap",
 });
 
@@ -13,6 +15,8 @@ export const metadata: Metadata = {
   title: "Playbook",
   description: "Contás cuántos vinieron y Playbook te arma el entrenamiento de hockey, con la pizarra animada.",
   applicationName: "Playbook",
+  appleWebApp: { capable: true, title: "Playbook", statusBarStyle: "black-translucent" },
+  icons: { apple: "/iconos/apple-touch-icon.png" },
 };
 
 export const viewport: Viewport = {
@@ -24,8 +28,10 @@ export const viewport: Viewport = {
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
-    <html lang="es-AR" className={`${archivo.variable} antialiased`}>
-      <body className="min-h-dvh">{children}</body>
+    <html lang="es-AR" data-tema="oscuro" className={`${archivo.variable} antialiased`} suppressHydrationWarning>
+      <body className="min-h-dvh">
+        <Proveedores>{children}</Proveedores>
+      </body>
     </html>
   );
 }

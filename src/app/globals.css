@@ -39,6 +39,19 @@
   color-scheme: dark;
 }
 
+/* Tema claro (Mi club). La cancha sigue siendo azul: es el héroe en los dos temas. */
+[data-tema="claro"] {
+  --ground: #f2f4f7;
+  --surface: #ffffff;
+  --raised: #e3e8ef;
+  --raised-hover: #d8dee7;
+  --line: #d3d9e2;
+  --ink: #0b1220;
+  --ink-muted: #3d4a5c;
+  --ink-faint: #56637a;
+  color-scheme: light;
+}
+
 /* Modo cancha: negro y blanco puros; la pizarra pasa a tiza sobre negro. */
 [data-mode="cancha"] {
   --ground: #000000;
