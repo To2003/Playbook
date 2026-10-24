@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import { Suspense, useCallback, useEffect, useRef, useState } from "react";
 import { Cabecera } from "@/components/Cabecera";
+import { BotonExportar } from "@/components/exportar/BotonExportar";
 import { Herramientas, HERRAMIENTAS } from "@/components/editor/Herramientas";
 import { Lienzo, type Herramienta } from "@/components/editor/Lienzo";
 import { LineaPasos } from "@/components/editor/LineaPasos";
@@ -250,9 +251,12 @@ function Editor() {
         <section className="relative flex min-h-0 flex-col gap-2" aria-label="Pizarra">
           <div className="flex items-center justify-between gap-3">
             <Segmentado leyenda="Vista" nombre="vista" ocultarLeyenda alto="md" opciones={VISTAS_OPCIONES} valor={pz.vista} onCambio={(v) => despachar({ tipo: "vista", vista: v })} />
-            <button type="button" aria-pressed={viendo} onClick={() => setViendo((v) => !v)} className={`pressable h-11 rounded-card px-4 text-label font-semibold ${viendo ? "bg-ink text-ground" : "bg-raised"}`}>
-              {viendo ? "Volver a editar" : "Ver animación"}
-            </button>
+            <div className="flex items-center gap-2">
+              <BotonExportar e={e} className="pressable h-11 rounded-card bg-raised px-4 text-label font-semibold" />
+              <button type="button" aria-pressed={viendo} onClick={() => setViendo((v) => !v)} className={`pressable h-11 rounded-card px-4 text-label font-semibold ${viendo ? "bg-ink text-ground" : "bg-raised"}`}>
+                {viendo ? "Volver a editar" : "Ver animación"}
+              </button>
+            </div>
           </div>
           <div className="relative min-h-0 flex-1 overflow-hidden rounded-card bg-[var(--turf-runoff)]">
             {viendo ? (

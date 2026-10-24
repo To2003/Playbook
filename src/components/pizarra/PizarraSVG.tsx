@@ -25,12 +25,14 @@ export interface PropsPizarraSVG {
   svgRef?: Ref<SVGSVGElement>;
   /** Prefijo único para los ids de las máscaras (varias pizarras en la misma pantalla). */
   idBase?: string;
+  /** Tamaño fijo en unidades del SVG que la contiene (póster exportado). */
+  tam?: { w: number; h: number };
 }
 
 // Las zonas van abajo de todo; la bocha arriba de los jugadores.
 const capa = (e: Elemento) => (e.tipo === "zona" ? 0 : e.tipo === "bocha" ? 3 : e.tipo === "jugador" || e.tipo === "arquero" ? 2 : 1);
 
-export function PizarraSVG({ pizarra, aspecto, altoContraste = false, modo = "final", className, titulo, svgRef, idBase = "pz" }: PropsPizarraSVG) {
+export function PizarraSVG({ pizarra, aspecto, altoContraste = false, modo = "final", className, titulo, svgRef, idBase = "pz", tam }: PropsPizarraSVG) {
   const orientacion = orientacionDe(pizarra.vista);
   const rad = RADIO_FICHA[pizarra.vista];
   const grosor = GROSOR_TIZA[pizarra.vista] * (altoContraste ? 1.4 : 1);
@@ -45,6 +47,8 @@ export function PizarraSVG({ pizarra, aspecto, altoContraste = false, modo = "fi
     <svg
       ref={svgRef}
       viewBox={`${vb.x} ${vb.y} ${vb.w} ${vb.h}`}
+      width={tam?.w}
+      height={tam?.h}
       className={className}
       role="img"
       aria-label={titulo ?? "Pizarra del ejercicio"}

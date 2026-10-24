@@ -52,6 +52,14 @@
   color-scheme: light;
 }
 
+/* El PNG exportado sale siempre en la versión nocturna, aunque la app esté en tema claro. */
+[data-poster] {
+  --ground: #070b12;
+  --ink: #f2f5f8;
+  --ink-muted: #a9b4c4;
+  --ink-faint: #8390a5;
+}
+
 /* Modo cancha: negro y blanco puros; la pizarra pasa a tiza sobre negro. */
 [data-mode="cancha"] {
   --ground: #000000;
