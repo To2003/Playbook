@@ -1,7 +1,7 @@
 {
   "flujo": {
     "390": {
-      "segundos": 2.937,
+      "segundos": 2.963,
       "pantallas": [
         "/armar",
         "/armar/opciones",
@@ -9,7 +9,7 @@
       ]
     },
     "1440": {
-      "segundos": 2.862,
+      "segundos": 2.985,
       "pantallas": [
         "/armar",
         "/armar/opciones",
@@ -24,12 +24,12 @@
     {
       "archivo": "capturas/final/momentos-firma-390.webm",
       "segundos": 27,
-      "cuadros": 1197
+      "cuadros": 1188
     },
     {
       "archivo": "capturas/final/editor-inercia-1440.webm",
       "segundos": 11,
-      "cuadros": 206
+      "cuadros": 196
     }
   ],
   "fallas": []

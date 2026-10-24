@@ -1,0 +1,32 @@
+{
+  "contador": {
+    "fps": 60,
+    "cuadrosLargos": 0,
+    "peorMs": 33,
+    "cuadros": 194
+  },
+  "divisionYCartas": {
+    "fps": 50,
+    "cuadrosLargos": 3,
+    "peorMs": 300,
+    "cuadros": 170
+  },
+  "dameOtro": {
+    "fps": 57,
+    "cuadrosLargos": 1,
+    "peorMs": 67,
+    "cuadros": 112
+  },
+  "pizarra": {
+    "fps": 60,
+    "cuadrosLargos": 0,
+    "peorMs": 17,
+    "cuadros": 300
+  },
+  "editorArrastre": {
+    "fps": 60,
+    "cuadrosLargos": 0,
+    "peorMs": 17,
+    "cuadros": 94
+  }
+}

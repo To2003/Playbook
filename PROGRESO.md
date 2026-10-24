@@ -15,7 +15,7 @@
 - [x] **M8.** Supabase detrás de env: auth, sync (test con mock), `/e/[id]`, RLS, migraciones. (RLS probado en Postgres 16 local; `tests/sync.test.ts` 10/10; `e2e/nube.mjs` 10/10 sin env; `e2e/nube-mock.mjs` 15/15 con nube simulada; Mi club)
 - [x] **M9.** Exportar PNG 1080 × 1350. (ficha y editor; `e2e/exportar.mjs` 10/10; pósters en `capturas/m9`)
 - [x] **M10.** Biblioteca completa: 60 ejercicios + 8 tareas de arquero, pizarras de 2 a 6 pasos, validador en verde.
-- [ ] **M11.** Verificación final (Playwright 390 y 1440, offline, video), `web-design-guidelines`, REPORTE.md, README.md.
+- [x] **M11.** Verificación final (Playwright 390 y 1440, offline, video), `web-design-guidelines`, REPORTE.md, README.md. (`BASE=http://localhost:3100 npm run e2e` en verde; ver REPORTE)
 
 ## Notas de estado
 - Repo remoto: no se pudo crear (token de GitHub inválido en la sesión). Se entrega `playbook.bundle`.
