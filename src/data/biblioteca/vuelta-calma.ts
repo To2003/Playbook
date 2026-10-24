@@ -108,14 +108,13 @@ export const VUELTA_CALMA: Ejercicio[] = [
       avanzado: "Una vuelta y cada uno dice algo que mejoró del compañero.",
     },
     progresion: { masFacil: "Solo la charla.", masDificil: "Sumá movilidad articular mientras caminan." },
-    pizarra: pizarra(
-      "media",
-      equipo(A, 6),
-      Object.fromEntries([1, 2, 3, 4, 5, 6].map((i) => [`a${i}`, p(50 + i * 5, 3)])),
-      [
-        { ms: 2600, movs: [1, 2, 3, 4, 5, 6].map((i) => corre(`a${i}`, p(88, 8 + i * 4), p(88, 3))) },
-        { ms: 2600, movs: [1, 2, 3, 4, 5, 6].map((i) => corre(`a${i}`, p(78 - i * 4, 52), p(88, 52))) },
-      ],
-    ),
+    pizarra: (() => {
+      const g = equipo(A, 6);
+      const salida = [p(50, 18), p(49, 24), p(51, 30), p(48, 36), p(52, 41), p(50, 13)];
+      return pizarra("media", g, Object.fromEntries(g.map((x, i) => [x.id, salida[i]])), [
+        { ms: 2600, movs: g.map((x, i) => corre(x.id, p(salida[i].x + 18, salida[i].y + (i % 2 ? 1.5 : -1.5)))) },
+        { ms: 2600, movs: g.map((x, i) => corre(x.id, p(salida[i].x + 30, 27.5 + (salida[i].y - 27.5) * 0.45))) },
+      ]);
+    })(),
   }),
 ];

@@ -14,7 +14,7 @@
 - [ ] **M7.** Editor desktop + boceto mobile + "Duplicar y editar".
 - [ ] **M8.** Supabase detrás de env: auth, sync (test con mock), `/e/[id]`, RLS, migraciones.
 - [ ] **M9.** Exportar PNG 1080 × 1350.
-- [ ] **M10.** Biblioteca completa: 60 ejercicios + 8 tareas de arquero, pizarras de 2 a 6 pasos, validador en verde.
+- [x] **M10.** Biblioteca completa: 60 ejercicios + 8 tareas de arquero, pizarras de 2 a 6 pasos, validador en verde.
 - [ ] **M11.** Verificación final (Playwright 390 y 1440, offline, video), `web-design-guidelines`, REPORTE.md, README.md.
 
 ## Notas de estado

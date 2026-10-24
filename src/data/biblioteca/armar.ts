@@ -95,3 +95,25 @@ export function ejercicio(d: DatosEjercicio): Ejercicio {
     ...d,
   };
 }
+
+// ---------------------------------------------------------------------------
+// Ubicación
+
+/** n puntos parejos entre a y b (incluidos los extremos). */
+export function enLinea(n: number, a: Punto, b: Punto): Punto[] {
+  if (n === 1) return [{ x: (a.x + b.x) / 2, y: (a.y + b.y) / 2 }];
+  return Array.from({ length: n }, (_, i) => ({ x: a.x + ((b.x - a.x) * i) / (n - 1), y: a.y + ((b.y - a.y) * i) / (n - 1) }));
+}
+
+/** n puntos en ronda alrededor de un centro, arrancando en `desde` grados. */
+export function enRonda(n: number, centro: Punto, radio: number, desde = 0): Punto[] {
+  return Array.from({ length: n }, (_, i) => {
+    const a = ((desde + (360 * i) / n) * Math.PI) / 180;
+    return { x: centro.x + Math.cos(a) * radio, y: centro.y + Math.sin(a) * radio };
+  });
+}
+
+/** Asigna puntos a elementos, en orden: `asignar(equipo(A, 3), puntos)`. */
+export function asignar(els: Elemento[], puntos: Punto[]): Record<string, Punto> {
+  return Object.fromEntries(els.map((e, i) => [e.id, puntos[i]]));
+}
