@@ -26,10 +26,10 @@ export function minimoDelFormato(f: Formato): number {
 }
 
 /** La división sin estaciones: el grupo entero en un solo espacio. */
-function dividirUno(n: number, f: Formato): Omit<Division, "estaciones" | "texto"> & { detalle: string } {
+function dividirUno(n: number, f: Formato, conBocha: boolean): Omit<Division, "estaciones" | "texto"> & { detalle: string } {
   switch (f.tipo) {
     case "individual":
-      return { partes: Array(n).fill(1), comodines: 0, rotan: 0, detalle: "todos a la vez, cada uno con su bocha" };
+      return { partes: Array(n).fill(1), comodines: 0, rotan: 0, detalle: conBocha ? "todos a la vez, cada uno con su bocha" : "todos a la vez" };
     case "parejas": {
       if (n < 4) return { partes: [n], comodines: 0, rotan: 0, detalle: n === 3 ? "1 terna" : "1 pareja" };
       const ternas = n % 2;
@@ -74,10 +74,11 @@ function dividirUno(n: number, f: Formato): Omit<Division, "estaciones" | "texto
  * Si son más que el máximo del ejercicio, se arma en estaciones (salvo superioridad, que rota).
  * Invariante: suma(partes) + comodines + rotan === n.
  */
-export function dividir(n: number, f: Formato, max: number, rotacionMin = 6): Division {
+export function dividir(n: number, f: Formato, max: number, opciones: { conBocha?: boolean; rotacionMin?: number } = {}): Division {
+  const { conBocha = true, rotacionMin = 6 } = opciones;
   const estaciones = f.tipo !== "superioridad" && n > max && max > 0 ? Math.ceil(n / max) : 1;
   if (estaciones === 1) {
-    const { detalle, ...resto } = dividirUno(n, f);
+    const { detalle, ...resto } = dividirUno(n, f, conBocha);
     return { ...resto, estaciones: 1, texto: `${n} → ${detalle}` };
   }
   const tamanos = repartir(n, estaciones);
@@ -86,7 +87,7 @@ export function dividir(n: number, f: Formato, max: number, rotacionMin = 6): Di
   let rotan = 0;
   const detalles: string[] = [];
   for (const t of tamanos) {
-    const d = dividirUno(t, f);
+    const d = dividirUno(t, f, conBocha);
     partes.push(...d.partes);
     comodines += d.comodines;
     rotan += d.rotan;

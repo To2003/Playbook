@@ -8,7 +8,7 @@
 - [x] **M1.** Base: tipos del prompt, Archivo local, Dexie (`ejercicios`, `sesiones`, `ajustes`), Serwist, layout mobile, tema oscuro.
 - [x] **M2.** Tipos + biblioteca semilla 20 ejercicios + 4 tareas de arquero + validador que rompe el build.
 - [x] **M3.** Pizarra: render + reproductor (play/pausa, velocidad, loop, pasos), MotionPath, stroke-dashoffset, IntersectionObserver, reduced motion.
-- [ ] **M4.** Motor de generación + tests de la sección 5 + flujo de 3 pantallas con momentos firma 1, 2 y 3.
+- [x] **M4.** Motor de generación + tests de la sección 5 + flujo de 3 pantallas con momentos firma 1, 2 y 3.
 - [ ] **M5.** Modo cancha: cronómetro, silbato visual, vibración, Wake Lock, modo sol, vertical y horizontal.
 - [ ] **M6.** Biblioteca con filtros + ficha completa.
 - [ ] **M7.** Editor desktop + boceto mobile + "Duplicar y editar".

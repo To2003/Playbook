@@ -1,17 +1,32 @@
 "use client";
 
 import Link from "next/link";
-import { useState } from "react";
+import { useEffect } from "react";
+import { BarraPasos } from "@/components/BarraPasos";
 import { CanchaContador } from "@/components/contador/CanchaContador";
 import { IconoMas, IconoMenos, IconoVolver } from "@/components/iconos";
-import { BarraPasos } from "@/components/BarraPasos";
+import { Segmentado } from "@/components/Segmentado";
+import { cambiarArmado, cargarArmado, leerArmado, useArmado } from "@/lib/estado/armado";
+import { useRepetir } from "@/lib/hooks/useRepetir";
+import { vibrar } from "@/lib/vibrar";
 
 const MIN = 4;
 const MAX = 30;
 
+function sumar(delta: number) {
+  const n = Math.max(MIN, Math.min(MAX, leerArmado().jugadores + delta));
+  if (n !== leerArmado().jugadores) vibrar(6);
+  cambiarArmado({ jugadores: n });
+}
+
 export default function CuantosVinieron() {
-  const [jugadores, setJugadores] = useState(14);
-  const [arqueros, setArqueros] = useState(2);
+  const { jugadores, arqueros } = useArmado();
+  const menos = useRepetir(() => sumar(-1));
+  const mas = useRepetir(() => sumar(1));
+
+  useEffect(() => {
+    void cargarArmado();
+  }, []);
 
   return (
     <div className="mx-auto flex min-h-dvh max-w-[480px] flex-col px-4 pt-[max(env(safe-area-inset-top),12px)]">
@@ -30,16 +45,13 @@ export default function CuantosVinieron() {
           <div className="pointer-events-none absolute inset-x-0 bottom-[12%] flex flex-col items-center">
             <output
               aria-live="polite"
+              aria-label={`${jugadores} jugadores de campo`}
               className="marcador text-[9rem] text-chalk"
               style={{ WebkitTextStroke: "10px var(--ground)", paintOrder: "stroke fill" }}
             >
               {jugadores}
             </output>
-            <span
-              className="mt-1 rounded-chip bg-ground px-2 py-0.5 text-label font-semibold text-ink"
-            >
-              jugadores de campo
-            </span>
+            <span className="mt-1 rounded-chip bg-ground px-2 py-0.5 text-label font-semibold text-ink">jugadores de campo</span>
           </div>
         </section>
 
@@ -48,41 +60,40 @@ export default function CuantosVinieron() {
             type="button"
             aria-label="Uno menos"
             disabled={jugadores <= MIN}
-            onClick={() => setJugadores((n) => Math.max(MIN, n - 1))}
-            className="pressable pressable-raised btn-secondary grid size-[72px] place-items-center disabled:opacity-40"
+            {...menos}
+            className="pressable pressable-raised btn-secondary grid size-[72px] touch-none select-none place-items-center disabled:opacity-40"
           >
             <IconoMenos tam={32} />
           </button>
           <p className="text-center text-label text-ink-faint">
             de {MIN} a {MAX}
+            <br />
+            mantené para ir más rápido
           </p>
           <button
             type="button"
             aria-label="Uno más"
             disabled={jugadores >= MAX}
-            onClick={() => setJugadores((n) => Math.min(MAX, n + 1))}
-            className="pressable pressable-raised btn-secondary grid size-[72px] place-items-center disabled:opacity-40"
+            {...mas}
+            className="pressable pressable-raised btn-secondary grid size-[72px] touch-none select-none place-items-center disabled:opacity-40"
           >
             <IconoMas tam={32} />
           </button>
         </div>
 
-        <fieldset className="mt-5">
-          <legend className="text-label font-semibold text-ink-muted">Arqueros</legend>
-          <div className="mt-2 grid grid-cols-3 gap-1 rounded-card bg-surface p-1">
-            {[0, 1, 2].map((n) => (
-              <label
-                key={n}
-                className={`pressable marcador grid h-14 cursor-pointer place-items-center rounded-[6px] text-[2rem] ${
-                  arqueros === n ? "bg-ink text-ground" : "text-ink-muted"
-                }`}
-              >
-                <input type="radio" name="arqueros" value={n} checked={arqueros === n} onChange={() => setArqueros(n)} className="sr-only" />
-                {n}
-              </label>
-            ))}
-          </div>
-        </fieldset>
+        <div className="mt-5">
+          <Segmentado<0 | 1 | 2>
+            leyenda="Arqueros"
+            nombre="arqueros"
+            marcador
+            valor={arqueros}
+            onCambio={(a) => {
+              vibrar(6);
+              cambiarArmado({ arqueros: a });
+            }}
+            opciones={[0, 1, 2].map((n) => ({ valor: n as 0 | 1 | 2, etiqueta: n, nombre: `${n} arqueros` }))}
+          />
+        </div>
       </main>
 
       <div className="fixed inset-x-0 bottom-0 bg-ground">

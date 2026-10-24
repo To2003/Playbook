@@ -210,6 +210,27 @@
     outline-color: var(--lime);
     outline-offset: 3px;
   }
+  /* Fichas del momento "Armame la sesión": la forma y el color siguen al equipo. */
+  .ficha-flip {
+    transition: background-color var(--dur-base) var(--ease-out), border-radius var(--dur-base) var(--ease-out),
+      clip-path var(--dur-base) var(--ease-out);
+  }
+  .ficha-flip[data-color="A"] {
+    background: var(--lime);
+    border-radius: 50%;
+    clip-path: polygon(50% 0, 100% 0, 100% 50%, 100% 100%, 50% 100%, 0 100%, 0 50%, 0 0);
+  }
+  .ficha-flip[data-color="B"] {
+    background: var(--coral);
+    border-radius: 3px;
+    clip-path: polygon(50% 0, 100% 0, 100% 50%, 100% 100%, 50% 100%, 0 100%, 0 50%, 0 0);
+  }
+  .ficha-flip[data-color="C"] {
+    background: var(--wildcard);
+    border-radius: 0;
+    clip-path: polygon(50% 0, 50% 0, 100% 50%, 100% 50%, 50% 100%, 50% 100%, 0 50%, 0 50%);
+  }
+
   .btn-secondary {
     background: var(--raised);
     color: var(--ink);
