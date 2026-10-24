@@ -28,6 +28,7 @@ interface Contexto {
 
 /** Ejercicios que pueden entrar al motor: los base y los propios con fase y rango de jugadores. */
 export function utilizables(biblioteca: Ejercicio[]): Ejercicio[] {
+  // SPEC 5.3 y criterio 8: un propio entra si tiene fase y rango (sea borrador o listo) y es válido.
   return biblioteca.filter((e) => e.autor === "base" || (e.fase && e.jugadores && validarEjercicio(e, { base: false }).length === 0));
 }
 

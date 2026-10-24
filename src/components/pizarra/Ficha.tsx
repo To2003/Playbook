@@ -4,7 +4,8 @@ const r = (n: number) => Math.round(n * 100) / 100;
 
 interface Props {
   elemento: Elemento;
-  en: Punto;
+  /** Sin posición, la ubica GSAP (editor). */
+  en?: Punto;
   /** Radio de referencia de una ficha de jugador, en metros. */
   radio: number;
   /** La pizarra está rotada (vista parada): las etiquetas se enderezan. */
@@ -17,7 +18,7 @@ interface Props {
  */
 export function Ficha({ elemento, en, radio, girada }: Props) {
   return (
-    <g transform={`translate(${r(en.x)} ${r(en.y)})`} data-el={elemento.id}>
+    <g transform={en ? `translate(${r(en.x)} ${r(en.y)})` : undefined} data-el={elemento.id}>
       <Forma elemento={elemento} rad={radio} girada={girada} />
     </g>
   );
@@ -100,18 +101,22 @@ function Forma({ elemento, rad, girada }: { elemento: Elemento; rad: number; gir
     case "zona": {
       const w = elemento.tam?.w ?? 10;
       const h = elemento.tam?.h ?? 10;
+      const trazo = {
+        fill: "var(--chalk)",
+        fillOpacity: 0.1,
+        stroke: "var(--chalk)",
+        strokeOpacity: 0.55,
+        strokeWidth: rad * 0.16,
+        strokeDasharray: `${rad * 0.6} ${rad * 0.45}`,
+      };
+      if (elemento.forma === "elipse") return <ellipse rx={w / 2} ry={h / 2} {...trazo} />;
       return (
         <rect
           x={-w / 2}
           y={-h / 2}
           width={w}
           height={h}
-          fill="var(--chalk)"
-          fillOpacity={0.1}
-          stroke="var(--chalk)"
-          strokeOpacity={0.55}
-          strokeWidth={rad * 0.16}
-          strokeDasharray={`${rad * 0.6} ${rad * 0.45}`}
+          {...trazo}
         />
       );
     }

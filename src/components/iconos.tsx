@@ -134,3 +134,42 @@ export function Marca({ tam = 28 }: { tam?: number }) {
     </svg>
   );
 }
+export const IconoMover = (p: P) => (
+  <Base {...p}>
+    <path d="M5 3l12 7-5 1.5L9.5 17z" />
+  </Base>
+);
+/** Herramientas de trazo: el mismo lenguaje que la pizarra (línea llena, ondulada, punteada, gruesa). */
+export const IconoDesplazamiento = (p: P) => (
+  <Base {...p}>
+    <path d="M4 18L18 6M18 6h-6M18 6v6" />
+  </Base>
+);
+export const IconoConduccion = (p: P) => (
+  <Base {...p}>
+    <path d="M3 17c2-1 2-4 4-5s3 2 5 1 2-4 4-5l3-2M19 4v4M19 4h-4" />
+  </Base>
+);
+export const IconoPase = (p: P) => (
+  <Base {...p} strokeDasharray="3 3">
+    <path d="M4 18L18 6" />
+    <path d="M18 6h-6M18 6v6" strokeDasharray="none" />
+  </Base>
+);
+export const IconoTiro = (p: P) => (
+  <Base {...p} strokeWidth={3.5}>
+    <path d="M4 18L17 7M17 7h-5M17 7v5" />
+  </Base>
+);
+export const IconoDeshacer = (p: P) => (
+  <Base {...p}>
+    <path d="M9 14L4 9l5-5" />
+    <path d="M4 9h10a6 6 0 010 12h-3" />
+  </Base>
+);
+export const IconoRehacer = (p: P) => (
+  <Base {...p}>
+    <path d="M15 14l5-5-5-5" />
+    <path d="M20 9H10a6 6 0 000 12h3" />
+  </Base>
+);

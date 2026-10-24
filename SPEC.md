@@ -390,3 +390,4 @@ Aunque se entrega el MVP completo, el agente construye en este orden y verifica 
 - Staff de club con biblioteca compartida
 - Colores del club
 - Hockey 5s
+- Que solo los ejercicios propios en estado "listo" entren al motor (hoy entran también los borradores, por el criterio 8).

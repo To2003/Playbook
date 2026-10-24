@@ -19,6 +19,7 @@ export type Elemento = {
   equipo?: 'A' | 'B' | 'C'; // C = comodín
   etiqueta?: string;
   tam?: { w: number; h: number }; // zonas
+  forma?: 'elipse'; // zonas: rectángulo por defecto (agregado: el SPEC 6.2 pide rectángulo o elipse)
 };
 export type Trazo = {
   tipo: 'desplazamiento' | 'conduccion' | 'pase' | 'tiro';

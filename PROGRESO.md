@@ -11,7 +11,7 @@
 - [x] **M4.** Motor de generación + tests de la sección 5 + flujo de 3 pantallas con momentos firma 1, 2 y 3.
 - [x] **M5.** Modo cancha: cronómetro, silbato visual, vibración, Wake Lock, modo sol, vertical y horizontal.
 - [x] **M6.** Biblioteca con filtros + ficha completa.
-- [ ] **M7.** Editor desktop + boceto mobile + "Duplicar y editar".
+- [x] **M7.** Editor desktop + boceto mobile + "Duplicar y editar". (`e2e/editor.mjs` 19/19, `e2e/boceto.mjs` 10/10, capturas en `capturas/m7`)
 - [ ] **M8.** Supabase detrás de env: auth, sync (test con mock), `/e/[id]`, RLS, migraciones.
 - [ ] **M9.** Exportar PNG 1080 × 1350.
 - [x] **M10.** Biblioteca completa: 60 ejercicios + 8 tareas de arquero, pizarras de 2 a 6 pasos, validador en verde.

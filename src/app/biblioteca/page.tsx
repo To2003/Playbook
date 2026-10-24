@@ -1,16 +1,14 @@
 "use client";
 
-import Link from "next/link";
 import { useMemo, useState } from "react";
-import { Barras } from "@/components/Barras";
 import { Cabecera } from "@/components/Cabecera";
 import { IconoMas, IconoMenos, IconoSeguir } from "@/components/iconos";
-import { PizarraSVG } from "@/components/pizarra/PizarraSVG";
+import { Chip, FilaEjercicio } from "@/components/biblioteca/FilaEjercicio";
 import { Segmentado } from "@/components/Segmentado";
 import { useBiblioteca } from "@/lib/estado/sesiones";
 import { filtrarEjercicios, type Filtros } from "@/lib/filtros";
-import { NOMBRE_FASE, NOMBRE_FORMATO, NOMBRE_OBJETIVO } from "@/lib/nombres";
-import type { Ejercicio, Fase, Nivel, Objetivo } from "@/lib/tipos";
+import { NOMBRE_FASE, NOMBRE_OBJETIVO } from "@/lib/nombres";
+import type { Fase, Nivel, Objetivo } from "@/lib/tipos";
 
 const FASES: [Fase, string][] = [
   ["calor_sin_bocha", "Calor sin bocha"],
@@ -130,7 +128,7 @@ export default function Biblioteca() {
             <ul className="mt-2 flex flex-col lg:grid lg:grid-cols-3 lg:gap-4">
               {lista.map((e) => (
                 <li key={e.id} className="border-t border-line first:border-t-0 lg:border-t-0">
-                  <Fila e={e} />
+                  <FilaEjercicio e={e} />
                 </li>
               ))}
             </ul>
@@ -138,43 +136,5 @@ export default function Biblioteca() {
         ))
       )}
     </div>
-  );
-}
-
-function Fila({ e }: { e: Ejercicio }) {
-  return (
-    <Link
-      href={`/ficha?id=${encodeURIComponent(e.id)}`}
-      className="pressable flex items-center gap-3 rounded-card py-3 lg:flex-col lg:items-stretch lg:gap-0 lg:overflow-hidden lg:bg-surface lg:py-0"
-    >
-      <div className="w-28 shrink-0 overflow-hidden rounded-[4px] lg:w-full lg:rounded-none">
-        <PizarraSVG pizarra={e.pizarra} aspecto={4 / 3} className="h-auto w-full" titulo={`Pizarra: ${e.nombre}`} />
-      </div>
-      <div className="min-w-0 flex-1 lg:p-4">
-        <p className="text-body font-semibold leading-snug">{e.nombre}</p>
-        <p className="mt-1 flex flex-wrap items-center gap-x-2 gap-y-1 text-meta text-ink-muted">
-          <span className="num">
-            {e.jugadores.min === e.jugadores.max ? e.jugadores.min : `${e.jugadores.min}–${e.jugadores.max}`} {e.fase === "arquero" ? "arq." : "jug."}
-          </span>
-          <span aria-hidden="true">·</span>
-          <span>{NOMBRE_FORMATO(e.formato)}</span>
-          <Barras n={e.intensidad} tam={0.8} />
-          {e.autor !== "base" && <span className="rounded-chip bg-raised px-1.5 py-0.5 font-semibold text-ink">{e.estado === "borrador" ? "Borrador" : "Mío"}</span>}
-        </p>
-      </div>
-    </Link>
-  );
-}
-
-function Chip({ activo, onClick, children }: { activo: boolean; onClick: () => void; children: React.ReactNode }) {
-  return (
-    <button
-      type="button"
-      aria-pressed={activo}
-      onClick={onClick}
-      className={`pressable h-12 shrink-0 whitespace-nowrap rounded-chip px-3 text-label font-semibold ${activo ? "bg-ink text-ground" : "bg-raised text-ink"}`}
-    >
-      {children}
-    </button>
   );
 }
