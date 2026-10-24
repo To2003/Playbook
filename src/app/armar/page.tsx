@@ -87,7 +87,7 @@ export default function CuantosVinieron() {
 
       <div className="fixed inset-x-0 bottom-0 bg-ground">
         <div className="mx-auto max-w-[480px] px-4 pb-[max(env(safe-area-inset-bottom),16px)] pt-3">
-          <Link href="/sesion" className="pressable btn-primary flex h-16 items-center justify-center text-title">
+          <Link href="/armar/opciones" className="pressable btn-primary flex h-16 items-center justify-center text-title">
             Seguir
           </Link>
         </div>

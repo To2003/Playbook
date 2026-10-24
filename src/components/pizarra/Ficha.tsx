@@ -44,7 +44,7 @@ function Forma({ elemento, rad }: { elemento: Elemento; rad: number }) {
         const s = rad * 1.72;
         return (
           <>
-            <rect x={-s / 2} y={-s / 2} width={s} height={s} rx={rad * 0.22} fill="var(--coral)" />
+            <rect x={-s / 2} y={-s / 2} width={s} height={s} rx={rad * 0.22} fill="var(--coral)" stroke="var(--ficha-borde)" strokeWidth={rad * 0.14} />
             <Etiqueta texto={etiqueta} rad={rad} color="var(--on-lime)" />
           </>
         );
@@ -53,14 +53,14 @@ function Forma({ elemento, rad }: { elemento: Elemento; rad: number }) {
         const d = rad * 1.25;
         return (
           <>
-            <path d={`M0 ${-d}L${d} 0L0 ${d}L${-d} 0Z`} fill="var(--wildcard)" />
+            <path d={`M0 ${-d}L${d} 0L0 ${d}L${-d} 0Z`} fill="var(--wildcard)" stroke="var(--ficha-borde)" strokeWidth={rad * 0.14} />
             <Etiqueta texto={etiqueta} rad={rad * 0.9} color="var(--on-lime)" />
           </>
         );
       }
       return (
         <>
-          <circle r={rad} fill="var(--lime)" />
+          <circle r={rad} fill="var(--lime)" stroke="var(--ficha-borde)" strokeWidth={rad * 0.14} />
           <Etiqueta texto={etiqueta} rad={rad} color="var(--on-lime)" />
         </>
       );

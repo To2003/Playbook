@@ -1,0 +1,21 @@
+# Progreso de la corrida nocturna
+
+> Memoria de la corrida. Si se pierde el hilo: releer este archivo, `SPEC.md`, `CLAUDE.md` y `DECISIONES.md`, y retomar desde el primer ítem sin marcar.
+> Prioridad si falta tiempo: M0 → M4 → M5 → M6 → M10 → M7 → M9 → M8.
+> Al cerrar cada módulo: lint + typecheck + test en verde, capturas a 390 px en `capturas/<modulo>/`, review de animaciones si hay movimiento, commit y `playbook.bundle` (no hay repo remoto, ver REPORTE).
+
+- [x] **M0.** Cambios de la sección 1 (hidratación, modo sol, pantalla 2, contraste de fichas). Repo.
+- [ ] **M1.** Base: tipos del prompt, Archivo local, Dexie (`ejercicios`, `sesiones`, `ajustes`), Serwist, layout mobile, tema oscuro.
+- [ ] **M2.** Tipos + biblioteca semilla 20 ejercicios + 4 tareas de arquero + validador que rompe el build.
+- [ ] **M3.** Pizarra: render + reproductor (play/pausa, velocidad, loop, pasos), MotionPath, stroke-dashoffset, IntersectionObserver, reduced motion.
+- [ ] **M4.** Motor de generación + tests de la sección 5 + flujo de 3 pantallas con momentos firma 1, 2 y 3.
+- [ ] **M5.** Modo cancha: cronómetro, silbato visual, vibración, Wake Lock, modo sol, vertical y horizontal.
+- [ ] **M6.** Biblioteca con filtros + ficha completa.
+- [ ] **M7.** Editor desktop + boceto mobile + "Duplicar y editar".
+- [ ] **M8.** Supabase detrás de env: auth, sync (test con mock), `/e/[id]`, RLS, migraciones.
+- [ ] **M9.** Exportar PNG 1080 × 1350.
+- [ ] **M10.** Biblioteca completa: 60 ejercicios + 8 tareas de arquero, pizarras de 2 a 6 pasos, validador en verde.
+- [ ] **M11.** Verificación final (Playwright 390 y 1440, offline, video), `web-design-guidelines`, REPORTE.md, README.md.
+
+## Notas de estado
+- Repo remoto: no se pudo crear (token de GitHub inválido en la sesión). Se entrega `playbook.bundle`.

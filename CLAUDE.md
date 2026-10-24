@@ -42,7 +42,7 @@ Web app mobile-first para entrenadores de hockey sobre césped. Arma la sesión 
   - equipo A: lima, círculo lleno
   - equipo B: coral, con otra forma
   - comodín: blanco
-  - arquero: amarillo con borde grueso
+  - arquero: cian con borde grueso y anillo (antes amarillo: se confundía con el lima al sol)
 - **Tipografía:**
   - grotesca condensada y pesada, con números tabulares, para los números de marcador
   - sans limpia para el resto

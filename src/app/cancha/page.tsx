@@ -1,9 +1,13 @@
+"use client";
+
 import Link from "next/link";
+import { useState } from "react";
 import { Pizarra } from "@/components/pizarra/Pizarra";
-import { IconoArquero, IconoCerrar, IconoPausa } from "@/components/iconos";
-import { NOMBRE_FASE, type BloqueMaqueta, sesionMaqueta } from "@/data/maqueta";
+import { IconoArquero, IconoCerrar, IconoLuna, IconoPausa, IconoSol } from "@/components/iconos";
+import { type BloqueMaqueta, sesionMaqueta } from "@/data/maqueta";
 
 export default function ModoCancha() {
+  const [sol, setSol] = useState(false);
   const bloques = sesionMaqueta.items.filter((i): i is BloqueMaqueta => !("pausa" in i));
   const indice = 2;
   const bloque = bloques[indice];
@@ -13,15 +17,26 @@ export default function ModoCancha() {
   const ss = String(restante % 60).padStart(2, "0");
 
   return (
-    <div data-mode="cancha" className="min-h-dvh bg-ground text-ink">
+    <div data-mode="cancha" data-sol={sol} className="min-h-dvh bg-ground text-ink">
       <div className="mx-auto flex min-h-dvh max-w-[480px] flex-col px-4 pt-[max(env(safe-area-inset-top),8px)]">
         <header className="flex h-14 items-center justify-between">
           <p className="text-title font-semibold text-ink-muted">
-            Bloque {indice + 1} de {bloques.length} · {NOMBRE_FASE[bloque.fase].replace(" técnico/táctico", "")}
+            Bloque {indice + 1} de {bloques.length}
           </p>
-          <Link href="/sesion" aria-label="Salir del modo cancha" className="pressable -mr-3 grid size-12 place-items-center rounded-card">
-            <IconoCerrar tam={28} />
-          </Link>
+          <div className="-mr-3 flex items-center">
+            <button
+              type="button"
+              aria-pressed={sol}
+              onClick={() => setSol((s) => !s)}
+              className="pressable flex h-12 items-center gap-2 rounded-card px-3 text-label font-semibold"
+            >
+              {sol ? <IconoLuna tam={22} /> : <IconoSol tam={22} />}
+              {sol ? "Modo noche" : "Modo sol"}
+            </button>
+            <Link href="/sesion" aria-label="Salir del modo cancha" className="pressable grid size-12 place-items-center rounded-card">
+              <IconoCerrar tam={28} />
+            </Link>
+          </div>
         </header>
 
         <main className="flex flex-1 flex-col pb-[calc(112px+env(safe-area-inset-bottom))]">

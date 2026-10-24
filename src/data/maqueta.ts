@@ -288,7 +288,7 @@ export const sesionMaqueta: { jugadores: number; arqueros: number; nivel: string
     {
       id: "b2",
       fase: "calor_con_bocha",
-      minutos: 15,
+      minutos: 13,
       ejercicio: "Conducción en el cuadrado con derecho y revés",
       division: "14 → todos con bocha, cuadrado de 22 × 22 m",
       arqueros: "Arqueros: reacción a pases rasantes desde 8 m",
@@ -299,7 +299,7 @@ export const sesionMaqueta: { jugadores: number; arqueros: number; nivel: string
     {
       id: "b3",
       fase: "principal",
-      minutos: 13,
+      minutos: 15,
       ejercicio: "Push y recepción orientada en triángulos",
       division: "14 → 2 grupos de 4 y 2 de 3",
       arqueros: "Arqueros: despejes con el pie desde el borde del área",
@@ -309,7 +309,7 @@ export const sesionMaqueta: { jugadores: number; arqueros: number; nivel: string
     {
       id: "b4",
       fase: "principal",
-      minutos: 13,
+      minutos: 15,
       ejercicio: "Quite y marca en carriles, 1 contra 1",
       division: "14 → 7 parejas",
       arqueros: "Arqueros: achique y bloqueo en el 1 contra 1",
@@ -320,7 +320,7 @@ export const sesionMaqueta: { jugadores: number; arqueros: number; nivel: string
     {
       id: "b5",
       fase: "aplicado",
-      minutos: 28,
+      minutos: 26,
       ejercicio: "Reducido 7 contra 7 con salida por los costados",
       division: "14 → 7 contra 7, un arquero por equipo",
       pizarra: reducido,

@@ -13,7 +13,7 @@ colors:
   on-lime: "#0A1004"
   coral: "#FF7059"
   wildcard: "#F4F4EE"
-  keeper: "#FFCF2E"
+  keeper: "#3FDCFF"
   keeper-edge: "#0A1004"
   turf: "#1D5DAA"
   turf-stripe: "#1A549B"
@@ -159,7 +159,7 @@ La paleta es restringida: neutrales fríos de noche, el lima del peto y los colo
 - **Equipo A, lima** (#D2FA45): círculo lleno.
 - **Equipo B, coral** (#FF7059): cuadrado de esquinas apenas redondeadas.
 - **Comodín, blanco tiza** (#F4F4EE): rombo.
-- **Arquero, amarillo** (#FFCF2E): círculo con borde grueso oscuro (#0A1004) y un anillo exterior amarillo.
+- **Arquero, cian** (#3FDCFF): círculo con borde grueso oscuro (#0A1004) y un anillo exterior cian. Antes era amarillo (#FFCF2E), pero en la prueba de brillo alto (`capturas/contraste/`) se confundía con el equipo A lima. El cian no choca con el lima, el coral, el blanco ni el naranja de los conos, y el borde oscuro lo separa del sintético azul.
 - **Cono/plato** (#FF9A1F): triángulo chico.
 
 La forma lleva el significado, y el color lo refuerza. Una captura en escala de grises tiene que seguir siendo legible.

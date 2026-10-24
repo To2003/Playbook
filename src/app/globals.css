@@ -15,8 +15,9 @@
   --on-lime: #0a1004;
   --coral: #ff7059;
   --wildcard: #f4f4ee;
-  --keeper: #ffcf2e;
+  --keeper: #3fdcff;
   --keeper-edge: #0a1004;
+  --ficha-borde: transparent;
   --cone: #ff9a1f;
   --danger: #ff6b6b;
 
@@ -55,6 +56,26 @@
   --chalk: #ffffff;
   --chalk-width: 2px;
   --stroke-width: 3px;
+}
+
+/* Modo sol: negro sobre blanco puro. Las fichas ganan borde negro para que el lima no se pierda en el blanco. */
+[data-mode="cancha"][data-sol="true"] {
+  --ground: #ffffff;
+  --surface: #f0f0f0;
+  --raised: #e2e2e2;
+  --raised-hover: #d6d6d6;
+  --line: #c8c8c8;
+  --ink: #000000;
+  --ink-muted: #1a1a1a;
+  --ink-faint: #333333;
+  --turf: #ffffff;
+  --turf-stripe: #ffffff;
+  --turf-runoff: #ffffff;
+  --turf-fiber-light: #ffffff;
+  --turf-fiber-dark: #ffffff;
+  --chalk: #000000;
+  --ficha-borde: #000000;
+  color-scheme: light;
 }
 
 @theme inline {
@@ -168,6 +189,9 @@
     color: var(--on-lime);
     border-radius: var(--radius-card);
     font-weight: 700;
+  }
+  [data-sol="true"] .btn-primary {
+    box-shadow: inset 0 0 0 3px #000000;
   }
   .btn-primary:focus-visible {
     outline-color: var(--lime);
