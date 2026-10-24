@@ -24,7 +24,8 @@ function Nube() {
 
 export function Proveedores({ children }: { children: ReactNode }) {
   return (
-    <SerwistProvider swUrl="/serwist/sw.js" disable={process.env.NODE_ENV === "development"}>
+    // Sin recargar al volver la señal: cortaría el modo cancha en medio de un bloque.
+    <SerwistProvider swUrl="/serwist/sw.js" disable={process.env.NODE_ENV === "development"} reloadOnOnline={false}>
       <Tema />
       <Nube />
       {children}

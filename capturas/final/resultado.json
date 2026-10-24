@@ -1,0 +1,36 @@
+{
+  "flujo": {
+    "390": {
+      "segundos": 2.868,
+      "pantallas": [
+        "/armar",
+        "/armar/opciones",
+        "/sesion"
+      ]
+    },
+    "1440": {
+      "segundos": 2.838,
+      "pantallas": [
+        "/armar",
+        "/armar/opciones",
+        "/sesion"
+      ]
+    }
+  },
+  "offline": {
+    "sinRed": "sin red"
+  },
+  "videos": [
+    {
+      "archivo": "capturas/final/momentos-firma-390.webm",
+      "segundos": 27,
+      "cuadros": 1182
+    },
+    {
+      "archivo": "capturas/final/editor-inercia-1440.webm",
+      "segundos": 11,
+      "cuadros": 195
+    }
+  ],
+  "fallas": []
+}
