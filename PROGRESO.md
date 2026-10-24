@@ -6,7 +6,7 @@
 
 - [x] **M0.** Cambios de la sección 1 (hidratación, modo sol, pantalla 2, contraste de fichas). Repo.
 - [x] **M1.** Base: tipos del prompt, Archivo local, Dexie (`ejercicios`, `sesiones`, `ajustes`), Serwist, layout mobile, tema oscuro.
-- [ ] **M2.** Tipos + biblioteca semilla 20 ejercicios + 4 tareas de arquero + validador que rompe el build.
+- [x] **M2.** Tipos + biblioteca semilla 20 ejercicios + 4 tareas de arquero + validador que rompe el build.
 - [ ] **M3.** Pizarra: render + reproductor (play/pausa, velocidad, loop, pasos), MotionPath, stroke-dashoffset, IntersectionObserver, reduced motion.
 - [ ] **M4.** Motor de generación + tests de la sección 5 + flujo de 3 pantallas con momentos firma 1, 2 y 3.
 - [ ] **M5.** Modo cancha: cronómetro, silbato visual, vibración, Wake Lock, modo sol, vertical y horizontal.

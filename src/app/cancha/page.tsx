@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useState } from "react";
-import { Pizarra } from "@/components/pizarra/Pizarra";
+import { PizarraSVG } from "@/components/pizarra/PizarraSVG";
 import { IconoArquero, IconoCerrar, IconoLuna, IconoPausa, IconoSol } from "@/components/iconos";
 import { type BloqueMaqueta, sesionMaqueta } from "@/data/maqueta";
 
@@ -54,7 +54,7 @@ export default function ModoCancha() {
           <p className="num mt-0.5 text-[1.125rem] font-semibold text-ink-muted">{bloque.division}</p>
 
           <div className="mt-3 overflow-hidden rounded-pitch border-2 border-raised">
-            <Pizarra pizarra={bloque.pizarra} alto_contraste aspecto={1.7} className="h-auto w-full" titulo={`Pizarra: ${bloque.ejercicio}`} />
+            <PizarraSVG pizarra={bloque.pizarra} altoContraste aspecto={1.7} className="h-auto w-full" titulo={`Pizarra: ${bloque.ejercicio}`} />
           </div>
 
           <ul className="mt-3 flex flex-col gap-2 text-[1.1875rem] font-medium leading-snug">

@@ -1,7 +1,8 @@
 import Link from "next/link";
-import { Pizarra } from "@/components/pizarra/Pizarra";
+import { PizarraSVG } from "@/components/pizarra/PizarraSVG";
 import { IconoBiblioteca, IconoClub, IconoFlecha, IconoMisEjercicios, IconoSeguir, Marca } from "@/components/iconos";
-import { reducido, sesionMaqueta } from "@/data/maqueta";
+import { sesionMaqueta } from "@/data/maqueta";
+import { ejercicioBase } from "@/data/biblioteca";
 
 export default function Inicio() {
   const bloques = sesionMaqueta.items;
@@ -23,7 +24,7 @@ export default function Inicio() {
         <section aria-labelledby="hoy">
           <Link href="/sesion" className="pressable block overflow-hidden rounded-card bg-surface">
             <div className="overflow-hidden rounded-t-card">
-              <Pizarra pizarra={reducido} aspecto={16 / 9} className="h-auto w-full" titulo="Pizarra del juego reducido de la sesión de hoy" />
+              <PizarraSVG pizarra={ejercicioBase("reducido-salida-por-costados")!.pizarra} aspecto={16 / 9} className="h-auto w-full" titulo="Pizarra del juego reducido de la sesión de hoy" />
             </div>
             <div className="flex items-start justify-between gap-3 p-4">
               <div className="min-w-0">

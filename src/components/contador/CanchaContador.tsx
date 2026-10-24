@@ -1,12 +1,11 @@
 import { Cancha, DefsCancha, GROSOR_TIZA } from "@/components/pizarra/Cancha";
 import { Ficha } from "@/components/pizarra/Ficha";
-import { CANCHA, proyector, viewBox } from "@/lib/pizarra/geometria";
-import { lugaresContador } from "@/data/maqueta";
+import { CANCHA, ROTACION_VERTICAL, VISTAS, cajaEnPantalla } from "@/lib/pizarra/geometria";
+import { lugaresContador } from "@/lib/contador";
 
 const LUGARES = lugaresContador();
-const p = proyector("vertical");
 // Se dibuja de más hacia la mitad de la cancha y se recorta abajo: así llena el alto que haya.
-const vbMedia = viewBox("media", "vertical");
+const vbMedia = cajaEnPantalla(VISTAS.media, "vertical");
 const vb = { ...vbMedia, h: vbMedia.h + 30 };
 const RADIO = 1.75;
 
@@ -26,13 +25,15 @@ export function CanchaContador({ jugadores, arqueros }: { jugadores: number; arq
       aria-hidden="true"
     >
       <DefsCancha />
-      <Cancha orientacion="vertical" grosor={GROSOR_TIZA.media} />
+      <g transform={ROTACION_VERTICAL}>
+        <Cancha grosor={GROSOR_TIZA.media} />
       {LUGARES.slice(0, jugadores).map((lugar, i) => (
-        <Ficha key={i} elemento={{ id: `j${i}`, tipo: "jugador", equipo: "A" }} en={p(lugar)} radio={RADIO} />
+        <Ficha key={i} elemento={{ id: `j${i}`, tipo: "jugador", equipo: "A" }} en={lugar} radio={RADIO} girada />
       ))}
       {ARCO.slice(0, arqueros).map((lugar, i) => (
-        <Ficha key={`k${i}`} elemento={{ id: `k${i}`, tipo: "arquero" }} en={p(lugar)} radio={RADIO} />
+        <Ficha key={`k${i}`} elemento={{ id: `k${i}`, tipo: "arquero" }} en={lugar} radio={RADIO} girada />
       ))}
+      </g>
     </svg>
   );
 }

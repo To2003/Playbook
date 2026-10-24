@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { Pizarra } from "@/components/pizarra/Pizarra";
+import { PizarraSVG } from "@/components/pizarra/PizarraSVG";
 import {
   IconoAgua,
   IconoArquero,
@@ -93,7 +93,7 @@ function TarjetaBloque({ bloque }: { bloque: BloqueMaqueta }) {
       </div>
       <h2 className="px-4 text-title font-[650]">{bloque.ejercicio}</h2>
       <div className="mt-3 overflow-hidden">
-        <Pizarra pizarra={bloque.pizarra} aspecto={16 / 9} className="h-auto w-full" titulo={`Pizarra: ${bloque.ejercicio}`} />
+        <PizarraSVG pizarra={bloque.pizarra} aspecto={16 / 9} className="h-auto w-full" titulo={`Pizarra: ${bloque.ejercicio}`} />
       </div>
       <dl className="flex flex-col gap-1.5 px-4 pt-3 text-label">
         <div className="flex items-center gap-2">

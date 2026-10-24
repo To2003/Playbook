@@ -1,5 +1,4 @@
-import { CANCHA, type Orientacion, proyector } from "@/lib/pizarra/geometria";
-import type { Punto } from "@/lib/pizarra/types";
+import { CANCHA } from "@/lib/pizarra/geometria";
 
 const r = (n: number) => Math.round(n * 100) / 100;
 
@@ -7,92 +6,66 @@ const r = (n: number) => Math.round(n * 100) / 100;
 export const GROSOR_TIZA = { completa: 0.26, media: 0.22, area: 0.16 } as const;
 
 interface Props {
-  orientacion: Orientacion;
   grosor: number;
-  /** En modo cancha no hay textura: tiza sobre negro. */
+  /** En modo cancha y modo sol no hay textura: tiza sobre un fondo liso. */
   textura?: boolean;
 }
 
 /**
  * Cancha de hockey 11 a escala: sintético azul con franjas de corte, fibra sutil
- * y líneas de tiza. Coordenadas en metros; la proyección decide la orientación.
+ * y líneas de tiza. Coordenadas en metros de cancha; la orientación la da el grupo padre.
  */
-export function Cancha({ orientacion, grosor, textura = true }: Props) {
-  const p = proyector(orientacion);
+export function Cancha({ grosor, textura = true }: Props) {
   const { largo, ancho, linea23, radioArea, radioPunteada, penal, arco, profundidadArco, marcasCorner } = CANCHA;
   const medio = ancho / 2;
   const posteSup = medio - arco / 2;
   const posteInf = medio + arco / 2;
 
-  const pt = (x: number, y: number) => {
-    const q = p({ x, y });
-    return `${r(q.x)} ${r(q.y)}`;
-  };
-  const linea = (a: Punto, b: Punto) => `M${pt(a.x, a.y)}L${pt(b.x, b.y)}`;
-  const rect = (x0: number, y0: number, x1: number, y1: number) => {
-    const a = p({ x: x0, y: y0 });
-    const b = p({ x: x1, y: y1 });
-    return { x: r(Math.min(a.x, b.x)), y: r(Math.min(a.y, b.y)), width: r(Math.abs(b.x - a.x)), height: r(Math.abs(b.y - a.y)) };
-  };
-
-  // Área (círculo de tiro) y línea punteada a 5 m, para cada arco.
-  const areaDe = (fondo: number, dir: 1 | -1, radio: number) => {
+  const area = (fondo: number, dir: 1 | -1, radio: number) => {
     const xIn = fondo + dir * radio;
     const sweep = dir === 1 ? 1 : 0;
-    return (
-      `M${pt(fondo, posteSup - radio)}` +
-      `A${radio} ${radio} 0 0 ${sweep} ${pt(xIn, posteSup)}` +
-      `L${pt(xIn, posteInf)}` +
-      `A${radio} ${radio} 0 0 ${sweep} ${pt(fondo, posteInf + radio)}`
-    );
+    return `M${fondo} ${r(posteSup - radio)}A${radio} ${radio} 0 0 ${sweep} ${r(xIn)} ${r(posteSup)}L${r(xIn)} ${r(posteInf)}A${radio} ${radio} 0 0 ${sweep} ${fondo} ${r(posteInf + radio)}`;
   };
 
-  const franjas = Array.from({ length: 10 }, (_, i) => i);
   const anchoFranja = largo / 10;
-
-  const marcas = [0, largo].flatMap((fondo) => {
-    const dir = fondo === 0 ? 1 : -1;
-    return marcasCorner.flatMap((d) => [
-      linea({ x: fondo, y: posteSup - d }, { x: fondo + dir * 0.6, y: posteSup - d }),
-      linea({ x: fondo, y: posteInf + d }, { x: fondo + dir * 0.6, y: posteInf + d }),
-    ]);
-  });
-
-  const arcos = [0, largo].map((fondo) => {
-    const fuera = fondo === 0 ? -profundidadArco : largo + profundidadArco;
-    return `M${pt(fondo, posteSup)}L${pt(fuera, posteSup)}L${pt(fuera, posteInf)}L${pt(fondo, posteInf)}`;
-  });
-
-  // Más allá de la zona de seguridad sigue el sintético, más oscuro: los encuadres ajustados pueden mostrarlo.
-  const exterior = rect(-30, -30, largo + 30, ancho + 30);
-  const sintetico = rect(-2.5, -2.5, largo + 2.5, ancho + 2.5);
+  const marcas = [0, largo]
+    .flatMap((fondo) => {
+      const dir = fondo === 0 ? 1 : -1;
+      return marcasCorner.flatMap((d) => [
+        `M${fondo} ${r(posteSup - d)}h${dir * 0.6}`,
+        `M${fondo} ${r(posteInf + d)}h${dir * 0.6}`,
+      ]);
+    })
+    .join("");
+  const arcos = [0, largo]
+    .map((fondo) => {
+      const fuera = r(fondo === 0 ? -profundidadArco : largo + profundidadArco);
+      return `M${fondo} ${r(posteSup)}H${fuera}V${r(posteInf)}H${fondo}`;
+    })
+    .join("");
+  const punteada = `${r(grosor * 4)} ${r(grosor * 7)}`;
 
   return (
     <g aria-hidden="true">
-      <rect {...exterior} fill="var(--turf-runoff)" />
-      <rect {...sintetico} fill="var(--turf)" />
+      {/* Más allá de la zona de seguridad sigue el sintético, más oscuro: los encuadres ajustados pueden mostrarlo. */}
+      <rect x={-30} y={-30} width={largo + 60} height={ancho + 60} fill="var(--turf-runoff)" />
+      <rect x={-2.5} y={-2.5} width={largo + 5} height={ancho + 5} fill="var(--turf)" />
       {textura &&
-        franjas
-          .filter((i) => i % 2 === 1)
-          .map((i) => <rect key={i} {...rect(i * anchoFranja, -2.5, (i + 1) * anchoFranja, ancho + 2.5)} fill="var(--turf-stripe)" />)}
-      {textura && <rect {...exterior} fill="url(#pb-fibra)" />}
+        Array.from({ length: 5 }, (_, k) => k * 2 + 1).map((i) => (
+          <rect key={i} x={r(i * anchoFranja)} y={-2.5} width={r(anchoFranja)} height={ancho + 5} fill="var(--turf-stripe)" />
+        ))}
+      {textura && <rect x={-30} y={-30} width={largo + 60} height={ancho + 60} fill="url(#pb-fibra)" />}
 
-      <g fill="none" stroke="var(--chalk)" strokeWidth={grosor} strokeLinecap="butt" strokeLinejoin="miter">
-        <rect {...rect(0, 0, largo, ancho)} />
-        <path d={linea({ x: largo / 2, y: 0 }, { x: largo / 2, y: ancho })} />
-        <path d={linea({ x: linea23, y: 0 }, { x: linea23, y: ancho })} />
-        <path d={linea({ x: largo - linea23, y: 0 }, { x: largo - linea23, y: ancho })} />
-        <path d={areaDe(0, 1, radioArea)} />
-        <path d={areaDe(largo, -1, radioArea)} />
-        <path d={areaDe(0, 1, radioPunteada)} strokeDasharray={`${grosor * 4} ${grosor * 7}`} />
-        <path d={areaDe(largo, -1, radioPunteada)} strokeDasharray={`${grosor * 4} ${grosor * 7}`} />
-        <path d={marcas.join("")} />
-        <path d={arcos.join("")} strokeWidth={grosor * 1.6} />
+      <g fill="none" stroke="var(--chalk)" strokeWidth={grosor}>
+        <rect x={0} y={0} width={largo} height={ancho} />
+        <path d={`M${largo / 2} 0V${ancho}M${linea23} 0V${ancho}M${r(largo - linea23)} 0V${ancho}`} />
+        <path d={area(0, 1, radioArea) + area(largo, -1, radioArea)} />
+        <path d={area(0, 1, radioPunteada) + area(largo, -1, radioPunteada)} strokeDasharray={punteada} />
+        <path d={marcas} />
+        <path d={arcos} strokeWidth={grosor * 1.6} />
       </g>
-      {[penal, largo - penal].map((x) => {
-        const c = p({ x, y: medio });
-        return <circle key={x} cx={r(c.x)} cy={r(c.y)} r={grosor * 0.9} fill="var(--chalk)" />;
-      })}
+      <circle cx={penal} cy={medio} r={grosor * 0.9} fill="var(--chalk)" />
+      <circle cx={r(largo - penal)} cy={medio} r={grosor * 0.9} fill="var(--chalk)" />
     </g>
   );
 }
