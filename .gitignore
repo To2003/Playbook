@@ -40,3 +40,6 @@ yarn-error.log*
 *.tsbuildinfo
 next-env.d.ts
 playbook.bundle
+
+# Plantilla sin secretos
+!.env.example

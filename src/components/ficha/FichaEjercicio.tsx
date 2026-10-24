@@ -14,7 +14,7 @@ const ARQUEROS: Record<Ejercicio["arqueros"], string> = {
 const MATERIAL: Record<string, string> = { bochas: "bochas", conos: "conos o platos", vallas: "vallas", aros: "aros", arcosChicos: "arcos chicos", colores: "petos de colores" };
 
 /** Ficha completa (SPEC 5.1): pizarra animada con controles y todos los campos. */
-export function FichaEjercicio({ e, acciones }: { e: Ejercicio; acciones?: ReactNode }) {
+export function FichaEjercicio({ e, acciones, publica }: { e: Ejercicio; acciones?: ReactNode; /** Página pública: el ejercicio no es de quien la mira. */ publica?: boolean }) {
   const material = Object.entries(e.material)
     .filter(([, v]) => v)
     .map(([k]) => MATERIAL[k] ?? k);
@@ -28,7 +28,7 @@ export function FichaEjercicio({ e, acciones }: { e: Ejercicio; acciones?: React
             <Barras n={e.intensidad} /> Intensidad {e.intensidad}
           </span>
           <span>{e.niveles.map((n) => NOMBRE_NIVEL[n]).join(" · ")}</span>
-          {e.autor !== "base" && <span className="rounded-chip bg-raised px-1.5 py-0.5 font-semibold text-ink">{e.estado === "borrador" ? "Borrador" : "Mío"}</span>}
+          {e.autor !== "base" && !publica && <span className="rounded-chip bg-raised px-1.5 py-0.5 font-semibold text-ink">{e.estado === "borrador" ? "Borrador" : "Mío"}</span>}
         </div>
         <div className="mt-4 overflow-hidden rounded-pitch">
           <PizarraAnimada pizarra={e.pizarra} aspecto={16 / 10} controles soloVisible={false} titulo={`Pizarra: ${e.nombre}`} />

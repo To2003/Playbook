@@ -3,6 +3,7 @@
 import { SerwistProvider } from "@serwist/turbopack/react";
 import { useEffect, type ReactNode } from "react";
 import { useAjustes } from "@/lib/estado/ajustes";
+import { iniciarNube } from "@/lib/nube/cuenta";
 
 /** Sincroniza el tema elegido en Mi club con el documento. */
 function Tema() {
@@ -15,10 +16,17 @@ function Tema() {
   return null;
 }
 
+/** Si la nube está configurada: sesión de Google y sincronización en segundo plano. */
+function Nube() {
+  useEffect(() => iniciarNube(), []);
+  return null;
+}
+
 export function Proveedores({ children }: { children: ReactNode }) {
   return (
     <SerwistProvider swUrl="/serwist/sw.js" disable={process.env.NODE_ENV === "development"}>
       <Tema />
+      <Nube />
       {children}
     </SerwistProvider>
   );

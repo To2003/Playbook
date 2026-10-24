@@ -4,7 +4,7 @@ import type { Ajustes, Ejercicio, Sesion } from "./tipos";
 /** Un cambio local pendiente de subir a la nube (módulo de sync). */
 export interface CambioPendiente {
   id?: number;
-  tabla: "ejercicios" | "sesiones";
+  tabla: "ejercicios" | "sesiones" | "ajustes";
   claveId: string;
   op: "upsert" | "borrar";
   creado: number;
@@ -13,6 +13,14 @@ export interface CambioPendiente {
 /** Fila de ajustes: una sola, con clave fija. */
 export interface FilaAjustes extends Ajustes {
   clave: "yo";
+  /** Último cambio (ms), para resolver contra la nube. */
+  actualizado?: number;
+}
+
+/** Datos internos del dispositivo: marcas de sincronización por usuario. */
+export interface FilaMeta {
+  clave: string;
+  valor: number;
 }
 
 /**
@@ -24,6 +32,7 @@ export class PlaybookDB extends Dexie {
   sesiones!: EntityTable<Sesion, "id">;
   ajustes!: EntityTable<FilaAjustes, "clave">;
   cola!: EntityTable<CambioPendiente, "id">;
+  meta!: EntityTable<FilaMeta, "clave">;
 
   constructor(nombre = "playbook") {
     super(nombre);
@@ -33,6 +42,7 @@ export class PlaybookDB extends Dexie {
       ajustes: "clave",
       cola: "++id, tabla, claveId",
     });
+    this.version(2).stores({ meta: "clave" });
   }
 }
 

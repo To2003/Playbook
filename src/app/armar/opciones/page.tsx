@@ -7,6 +7,7 @@ import { BarraPasos } from "@/components/BarraPasos";
 import { DivisionFlip } from "@/components/flujo/DivisionFlip";
 import { IconoSeguir, IconoVolver } from "@/components/iconos";
 import { Segmentado } from "@/components/Segmentado";
+import { DURACIONES } from "@/lib/duraciones";
 import { useAjustes } from "@/lib/estado/ajustes";
 import { cambiarArmado, cargarArmado, recordarArmado, useArmado } from "@/lib/estado/armado";
 import { bibliotecaCompleta, guardarSesion, historialReciente } from "@/lib/estado/sesiones";
@@ -17,7 +18,6 @@ import type { BloqueSesion, Ejercicio, Intensidad, Nivel, Objetivo, Sesion, Tipo
 import { esPausa } from "@/lib/tipos";
 import { vibrar } from "@/lib/vibrar";
 
-const DURACIONES: Record<TipoSesion, number[]> = { completa: [60, 75, 90, 120], calor: [15, 20, 25, 30], principal: [30, 45, 60] };
 
 const OBJETIVOS: [Objetivo, string][] = [
   ["conduccion", "Conducción"],
