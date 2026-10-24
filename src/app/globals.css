@@ -12,6 +12,7 @@
   --ink-faint: #8390a5;
 
   --lime: #d2fa45;
+  --lime-hover: #defc72;
   --on-lime: #0a1004;
   --coral: #ff7059;
   --wildcard: #f4f4ee;
@@ -168,6 +169,12 @@
   h2,
   h3 {
     text-wrap: balance;
+    overflow-wrap: anywhere;
+  }
+  /* <option> nativo en Windows con tema oscuro: si no, sale blanco sobre blanco. */
+  select option {
+    background-color: var(--raised);
+    color: var(--ink);
   }
 }
 
@@ -200,8 +207,12 @@
     transform: scale(0.97);
   }
   @media (hover: hover) and (pointer: fine) {
-    .pressable-raised:hover {
+    .pressable-raised:hover,
+    .btn-secondary:hover {
       background-color: var(--raised-hover);
+    }
+    .btn-primary:hover {
+      background-color: var(--lime-hover);
     }
   }
 

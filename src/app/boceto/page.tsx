@@ -56,7 +56,7 @@ function Boceto() {
 
   return (
     <div className="mx-auto flex h-dvh max-w-[560px] flex-col gap-3 px-4 pb-[max(env(safe-area-inset-bottom),12px)] pt-[max(env(safe-area-inset-top),8px)]">
-      <Cabecera volver="/mis-ejercicios" etiquetaVolver="Volver a mis ejercicios">
+      <Cabecera volver="/mis-ejercicios" etiquetaVolver="Volver a mis ejercicios" alVolver={ed.confirmarSalida}>
         <button type="button" onClick={ed.deshacer} disabled={!ed.puedeDeshacer} aria-label="Deshacer" className="pressable grid size-12 place-items-center rounded-card disabled:opacity-35">
           <IconoDeshacer />
         </button>
@@ -67,6 +67,8 @@ function Boceto() {
           <input
             value={e.nombre}
             onChange={(ev) => despachar({ tipo: "ficha", cambios: { nombre: ev.target.value } })}
+            name="nombre"
+            autoComplete="off"
             placeholder="¿Cómo se llama?"
             className="h-12 w-full rounded-card bg-raised px-3 text-[1.125rem] font-bold placeholder:font-normal placeholder:text-ink-faint"
           />

@@ -155,7 +155,7 @@ function Editor() {
 
       <div className="hidden h-dvh grid-cols-[208px_minmax(0,1fr)_380px] grid-rows-[auto_minmax(0,1fr)_auto] gap-x-4 gap-y-3 p-4 lg:grid">
         <header className="col-span-3 flex items-center gap-3">
-          <Link href="/mis-ejercicios" aria-label="Volver a mis ejercicios" className="pressable grid size-11 place-items-center rounded-card">
+          <Link href="/mis-ejercicios" aria-label="Volver a mis ejercicios" onClick={ed.confirmarSalida} className="pressable grid size-11 place-items-center rounded-card">
             <span aria-hidden="true" className="text-[1.5rem] leading-none">
               ←
             </span>
@@ -165,7 +165,9 @@ function Editor() {
             <input
               value={e.nombre}
               onChange={(ev) => despachar({ tipo: "ficha", cambios: { nombre: ev.target.value } })}
-              placeholder="Nombre del ejercicio"
+              name="nombre"
+              autoComplete="off"
+              placeholder="Nombre del ejercicio…"
               className="h-12 w-full rounded-card bg-transparent px-2 text-[1.5rem] font-bold text-ink placeholder:text-ink-faint hover:bg-surface focus:bg-surface"
             />
           </label>

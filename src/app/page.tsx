@@ -31,7 +31,7 @@ export default function Inicio() {
       <header className="flex h-14 items-center justify-between">
         <span className="flex items-center gap-2">
           <Marca />
-          <span className="marcador text-[1.75rem] leading-none">Playbook</span>
+          <span className="marcador text-[1.75rem] leading-none" translate="no">Playbook</span>
         </span>
         <span className="text-label text-ink-muted">{hoy}</span>
       </header>

@@ -48,6 +48,9 @@ await ficha("a1").click();
 await ficha("a2").click({ modifiers: ["Shift"] });
 await ficha("b1").click({ modifiers: ["Shift"] });
 ok((await p.getByText("Selección (3)").count()) === 1, "shift-click selecciona tres");
+// Pausa humana: si el arrastre arranca a los pocos ms del shift-click sobre la misma ficha,
+// Draggable a veces no lo toma (ver DECISIONES.md).
+await p.waitForTimeout(250);
 const antesA2 = await centro("a2");
 const desde = await centro("b1");
 await p.mouse.move(desde.x, desde.y);
@@ -57,7 +60,7 @@ await p.waitForTimeout(150);
 await p.mouse.up();
 await p.waitForTimeout(1200);
 const despuesA2 = await centro("a2");
-ok(despuesA2.x - antesA2.x > 30 && despuesA2.y - antesA2.y > 20, "la selección se mueve en bloque");
+ok(despuesA2.x - antesA2.x > 30 && despuesA2.y - antesA2.y > 20, `la selección se mueve en bloque (a2 ${Math.round(despuesA2.x - antesA2.x)}, ${Math.round(despuesA2.y - antesA2.y)} px)`);
 
 // Alinear en fila y duplicar con Ctrl+D.
 await p.getByRole("button", { name: "Alinear en fila" }).click();
@@ -100,8 +103,8 @@ ok((await p.locator("[data-trazo-editable]").count()) === 0, "] pasa al paso 2 (
 await p.keyboard.press("[");
 
 // Ficha y guardado.
-await p.getByPlaceholder("Nombre del ejercicio").fill("Rondo del profe");
-await p.getByPlaceholder("Qué tienen que hacer.").fill("Tres contra uno, a dos toques.");
+await p.getByPlaceholder("Nombre del ejercicio…").fill("Rondo del profe");
+await p.getByPlaceholder("Qué tienen que hacer…").fill("Tres contra uno, a dos toques.");
 ok(await p.getByText("Listo.").isVisible(), "con nombre, consigna y fichas queda listo");
 await p.keyboard.press("Control+s");
 await p.waitForURL(/editor\?id=p-/);
@@ -127,7 +130,7 @@ await p.getByRole("button", { name: "Volver a editar" }).click();
 // Recargar: vuelve tal cual.
 await p.reload({ waitUntil: "networkidle" });
 await p.waitForSelector("[data-mov]");
-ok((await p.getByPlaceholder("Nombre del ejercicio").inputValue()) === "Rondo del profe", "al recargar vuelve el ejercicio");
+ok((await p.getByPlaceholder("Nombre del ejercicio…").inputValue()) === "Rondo del profe", "al recargar vuelve el ejercicio");
 await p.screenshot({ path: "capturas/m7/editor-1440.png" });
 
 ok(errores.length === 0, `sin errores en consola${errores.length ? ": " + errores.join(" | ") : ""}`);

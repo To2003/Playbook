@@ -150,10 +150,10 @@ export function PanelFicha({ e, despachar }: { e: Ejercicio; despachar: (a: Acci
         </div>
       </fieldset>
       <Fila t="Organización">
-        <textarea className={area} value={e.organizacion} onChange={(ev) => set({ organizacion: ev.target.value })} placeholder="Cómo se arma: espacio, filas, material." />
+        <textarea className={area} value={e.organizacion} onChange={(ev) => set({ organizacion: ev.target.value })} name="organizacion" placeholder="Cómo se arma: espacio, filas, material…" />
       </Fila>
       <Fila t="Consigna">
-        <textarea className={area} value={e.consigna} onChange={(ev) => set({ consigna: ev.target.value })} placeholder="Qué tienen que hacer." />
+        <textarea className={area} value={e.consigna} onChange={(ev) => set({ consigna: ev.target.value })} name="consigna" placeholder="Qué tienen que hacer…" />
       </Fila>
       <fieldset className="flex flex-col gap-1">
         <legend className={etiqueta}>Puntos clave (hasta 3)</legend>
@@ -162,7 +162,7 @@ export function PanelFicha({ e, despachar }: { e: Ejercicio; despachar: (a: Acci
             key={i}
             className={campo}
             value={v}
-            placeholder={`Punto clave ${i + 1}`}
+            placeholder={`Punto clave ${i + 1}…`}
             onChange={(ev) => {
               const l = listaFija(e.puntosClave, 3);
               l[i] = ev.target.value;
@@ -175,8 +175,8 @@ export function PanelFicha({ e, despachar }: { e: Ejercicio; despachar: (a: Acci
         <legend className={etiqueta}>Errores comunes y cómo corregirlos</legend>
         {e.errores.map((x, i) => (
           <div key={i} className="flex flex-col gap-1 rounded-card bg-surface p-2">
-            <input className={campo} value={x.error} placeholder="Error" onChange={(ev) => set({ errores: e.errores.map((y, k) => (k === i ? { ...y, error: ev.target.value } : y)) })} />
-            <input className={campo} value={x.correccion} placeholder="Cómo corregirlo" onChange={(ev) => set({ errores: e.errores.map((y, k) => (k === i ? { ...y, correccion: ev.target.value } : y)) })} />
+            <input className={campo} value={x.error} placeholder="Error: por ejemplo, frena antes de recibir…" onChange={(ev) => set({ errores: e.errores.map((y, k) => (k === i ? { ...y, error: ev.target.value } : y)) })} />
+            <input className={campo} value={x.correccion} placeholder="Cómo corregirlo…" onChange={(ev) => set({ errores: e.errores.map((y, k) => (k === i ? { ...y, correccion: ev.target.value } : y)) })} />
             <button type="button" onClick={() => set({ errores: e.errores.filter((_, k) => k !== i) })} className="self-end text-meta font-semibold text-danger">
               Sacar
             </button>
@@ -189,13 +189,13 @@ export function PanelFicha({ e, despachar }: { e: Ejercicio; despachar: (a: Acci
       <fieldset className="flex flex-col gap-1">
         <legend className={etiqueta}>Variantes por nivel</legend>
         {(Object.keys(NOMBRE_NIVEL) as Nivel[]).map((n) => (
-          <input key={n} className={campo} value={e.variantes[n] ?? ""} placeholder={NOMBRE_NIVEL[n]} onChange={(ev) => set({ variantes: { ...e.variantes, [n]: ev.target.value || undefined } })} />
+          <input key={n} className={campo} value={e.variantes[n] ?? ""} placeholder={`${NOMBRE_NIVEL[n]}…`} onChange={(ev) => set({ variantes: { ...e.variantes, [n]: ev.target.value || undefined } })} />
         ))}
       </fieldset>
       <fieldset className="flex flex-col gap-1">
         <legend className={etiqueta}>Progresión</legend>
-        <input className={campo} value={e.progresion?.masFacil ?? ""} placeholder="Más fácil" onChange={(ev) => set({ progresion: { ...e.progresion, masFacil: ev.target.value } })} />
-        <input className={campo} value={e.progresion?.masDificil ?? ""} placeholder="Más difícil" onChange={(ev) => set({ progresion: { ...e.progresion, masDificil: ev.target.value } })} />
+        <input className={campo} value={e.progresion?.masFacil ?? ""} placeholder="Más fácil…" onChange={(ev) => set({ progresion: { ...e.progresion, masFacil: ev.target.value } })} />
+        <input className={campo} value={e.progresion?.masDificil ?? ""} placeholder="Más difícil…" onChange={(ev) => set({ progresion: { ...e.progresion, masDificil: ev.target.value } })} />
       </fieldset>
     </form>
   );

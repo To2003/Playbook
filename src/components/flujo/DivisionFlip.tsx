@@ -105,7 +105,11 @@ export function DivisionFlip({ jugadores, arqueros, division, formato, ejercicio
       gsap.fromTo(texto.current, { opacity: 0, y: 12 }, { opacity: 1, y: 0, duration: 0.22, ease: "power2.out", delay: 0.55 });
     }, 160);
     const salir = window.setTimeout(() => fin.current(), 160 + 650 + 900);
+    // Se saltea tocando la pantalla o con Enter, Espacio o Escape.
+    const tecla = (ev: KeyboardEvent) => ["Enter", " ", "Escape"].includes(ev.key) && fin.current();
+    window.addEventListener("keydown", tecla);
     return () => {
+      window.removeEventListener("keydown", tecla);
       window.clearTimeout(t);
       window.clearTimeout(salir);
       flip?.kill();

@@ -45,7 +45,7 @@ export default function Compartido() {
   return (
     <div className="mx-auto min-h-dvh max-w-[480px] px-4 pb-16 pt-[max(env(safe-area-inset-top),16px)] lg:max-w-[1200px] lg:px-8">
       <header className="flex h-14 items-center justify-between">
-        <Link href="/" className="flex items-center gap-2 text-label font-extrabold tracking-[0.18em]">
+        <Link href="/" translate="no" className="flex items-center gap-2 text-label font-extrabold tracking-[0.18em]">
           <span aria-hidden="true" className="size-3.5 rounded-[3px] bg-lime" />
           PLAYBOOK
         </Link>

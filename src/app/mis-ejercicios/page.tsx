@@ -63,7 +63,7 @@ function Seccion({ titulo, nota, lista }: { titulo: string; nota?: string; lista
       {nota && <p className="text-meta text-ink-muted">{nota}</p>}
       <ul className="mt-2 flex flex-col lg:grid lg:grid-cols-3 lg:gap-4">
         {lista.map((e) => (
-          <li key={e.id} className="border-t border-line first:border-t-0 lg:border-t-0">
+          <li key={e.id} className="border-t border-line [contain-intrinsic-size:auto_104px] [content-visibility:auto] first:border-t-0 lg:border-t-0 lg:[contain-intrinsic-size:auto_330px]">
             <FilaEjercicio e={e} />
           </li>
         ))}

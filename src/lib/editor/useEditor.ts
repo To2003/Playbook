@@ -51,6 +51,22 @@ export function useEditor(id: string | null, inicial?: Partial<Ejercicio>) {
 
   const faltantes = cargado ? faltantesParaListo(h.presente) : [];
 
+  // Cambios sin guardar: el navegador pregunta antes de cerrar o recargar.
+  const hayCambios = guardado === "cambios";
+  useEffect(() => {
+    if (!hayCambios) return;
+    const avisar = (ev: BeforeUnloadEvent) => ev.preventDefault();
+    window.addEventListener("beforeunload", avisar);
+    return () => window.removeEventListener("beforeunload", avisar);
+  }, [hayCambios]);
+  /** Para los links de volver: pregunta si hay cambios sin guardar. */
+  const confirmarSalida = useCallback(
+    (ev: { preventDefault: () => void }) => {
+      if (hayCambios && !window.confirm("Tenés cambios sin guardar. ¿Salís igual?")) ev.preventDefault();
+    },
+    [hayCambios],
+  );
+
   const guardar = useCallback(
     async (forzarBorrador = false) => {
       setGuardado("guardando");
@@ -74,6 +90,8 @@ export function useEditor(id: string | null, inicial?: Partial<Ejercicio>) {
     guardar,
     guardado,
     faltantes,
+    hayCambios,
+    confirmarSalida,
     nuevo: base !== null && !base.actualizado,
   };
 }

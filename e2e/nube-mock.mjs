@@ -131,8 +131,8 @@ for (let i = 0; i < 4; i++) {
   await compu.p.mouse.move(x + (i % 2 ? -70 : 70), y - 45, { steps: 8 });
   await compu.p.mouse.up();
 }
-await compu.p.getByPlaceholder("Nombre del ejercicio").fill("Salida en cinco pasos");
-await compu.p.getByPlaceholder("Qué tienen que hacer.").fill("Recibe, gira y sale por el costado.");
+await compu.p.getByPlaceholder("Nombre del ejercicio…").fill("Salida en cinco pasos");
+await compu.p.getByPlaceholder("Qué tienen que hacer…").fill("Recibe, gira y sale por el costado.");
 await compu.p.keyboard.press("Control+s");
 await compu.p.waitForURL(/editor\?id=p-/);
 const id = new URL(compu.p.url()).searchParams.get("id");

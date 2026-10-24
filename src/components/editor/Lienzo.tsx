@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useLayoutEffect, useRef, useState } from "react";
+import { useLayoutEffect, useRef, useState } from "react";
 import { Cancha, DefsCancha, GROSOR_TIZA } from "@/components/pizarra/Cancha";
 import { Ficha } from "@/components/pizarra/Ficha";
 import type { Accion } from "@/lib/editor/estado";
@@ -46,10 +46,18 @@ export function Lienzo({ ejercicio, paso, orientacion, herramienta, seleccion, o
   const [borrador, setBorrador] = useState<{ desde: Punto; hasta: Punto } | null>(null);
   const seleccionRef = useRef(seleccion);
   const posRef = useRef(actual.posiciones);
-  useEffect(() => {
+  // Los refs se actualizan antes de pintar: un toque justo después de elegir ve la selección nueva.
+  const callbacks = useRef({ onSeleccion, onTrazoSel, despachar });
+  useLayoutEffect(() => {
     seleccionRef.current = seleccion;
     posRef.current = actual.posiciones;
+    callbacks.current = { onSeleccion, onTrazoSel, despachar };
   });
+  // Los Draggable se rearman solo si cambia la herramienta, el paso o qué fichas hay: si se
+  // rearmaran con cada cambio, una ficha que termina de deslizar cortaría el arrastre de otra.
+  const idsFichas = pz.elementos.map((e) => e.id).join(",");
+  /** Fichas que están en la mano (o deslizando): el render no las devuelve a su lugar. */
+  const enMovimiento = useRef(new Set<string>());
 
   // Cambió la vista: se reencuadra (ajuste de estado durante el render, sin efecto).
   const claveVista = `${pz.vista}-${orientacion}`;
@@ -72,6 +80,7 @@ export function Lienzo({ ejercicio, paso, orientacion, herramienta, seleccion, o
     const raiz = contenido.current;
     if (!raiz) return;
     for (const [id, q] of Object.entries(actual.posiciones)) {
+      if (enMovimiento.current.has(id)) continue;
       const el = raiz.querySelector(`[data-mov="${CSS.escape(id)}"]`);
       if (el) gsap.set(el, { x: q.x, y: q.y });
     }
@@ -91,13 +100,20 @@ export function Lienzo({ ejercicio, paso, orientacion, herramienta, seleccion, o
         bounds: { minX: -2, maxX: 93.4, minY: -2, maxY: 57 },
         throwResistance: 2600,
         zIndexBoost: false,
+        // TODO(playbook): un press a los pocos ms de un shift-click sobre la misma ficha a veces no
+        // inicia el arrastre (visto solo en pruebas automáticas). Ver DECISIONES.md 36.
         onPress(ev: PointerEvent) {
           const id = nodo.dataset.mov!;
           const sel = seleccionRef.current;
-          if (ev.shiftKey || ev.metaKey || ev.ctrlKey) onSeleccion(sel.includes(id) ? sel.filter((x) => x !== id) : [...sel, id]);
-          else if (!sel.includes(id)) onSeleccion([id]);
-          onTrazoSel(null);
+          const elegir = (ids: string[]) => {
+            seleccionRef.current = ids;
+            callbacks.current.onSeleccion(ids);
+          };
+          if (ev.shiftKey || ev.metaKey || ev.ctrlKey) elegir(sel.includes(id) ? sel.filter((x) => x !== id) : [...sel, id]);
+          else if (!sel.includes(id)) elegir([id]);
+          callbacks.current.onTrazoSel(null);
           inicio = { ...posRef.current };
+          for (const x of seleccionRef.current.includes(id) ? seleccionRef.current : [id]) enMovimiento.current.add(x);
         },
         onDrag() {
           moverJunto(this.x, this.y, nodo);
@@ -110,6 +126,10 @@ export function Lienzo({ ejercicio, paso, orientacion, herramienta, seleccion, o
         },
         onThrowComplete() {
           confirmar(nodo);
+        },
+        onClick() {
+          enMovimiento.current.delete(nodo.dataset.mov!);
+          for (const x of seleccionRef.current) enMovimiento.current.delete(x);
         },
       })[0],
     );
@@ -135,11 +155,12 @@ export function Lienzo({ ejercicio, paso, orientacion, herramienta, seleccion, o
         const el = raiz!.querySelector(`[data-mov="${CSS.escape(x)}"]`);
         if (el) posiciones[x] = { x: Number(gsap.getProperty(el, "x")), y: Number(gsap.getProperty(el, "y")) };
       }
+      for (const x of ids) enMovimiento.current.delete(x);
       const cambio = Object.entries(posiciones).some(([k, q]) => !inicio[k] || Math.hypot(q.x - inicio[k].x, q.y - inicio[k].y) > 0.05);
-      if (cambio) despachar({ tipo: "mover", paso, posiciones });
+      if (cambio) callbacks.current.despachar({ tipo: "mover", paso, posiciones });
     }
     return () => ds.forEach((d) => d.kill());
-  }, [herramienta, paso, pz.elementos.length, ejercicio, despachar, onSeleccion, onTrazoSel, reducido]);
+  }, [herramienta, paso, idsFichas, reducido]);
 
   // Dibujar un trazo: desde una ficha hasta donde se suelta.
   const empezarTrazo = (ev: React.PointerEvent, el: Elemento) => {

@@ -10,6 +10,7 @@ colors:
   ink-muted: "#A9B4C4"
   ink-faint: "#8390A5"
   lime: "#D2FA45"
+  lime-hover: "#DEFC72"   # hover de la acción principal (solo puntero fino)
   on-lime: "#0A1004"
   coral: "#FF7059"
   wildcard: "#F4F4EE"

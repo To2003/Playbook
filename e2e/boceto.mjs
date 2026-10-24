@@ -51,6 +51,14 @@ await paleta("Equipo A").click();
 await paleta("Bocha").click();
 await paleta("Equipo B").click();
 ok((await p.locator("[data-mov]").count()) === 4, "la paleta compacta agrega fichas");
+let pregunto = "";
+p.once("dialog", (d) => {
+  pregunto = d.message();
+  void d.dismiss();
+});
+await p.getByRole("link", { name: "Volver a mis ejercicios" }).click();
+await p.waitForTimeout(300);
+ok(pregunto.includes("sin guardar") && p.url().includes("/boceto"), "con cambios sin guardar, volver pregunta y se puede quedar");
 const a2 = await centro('[data-mov="a2"]');
 await arrastrar(a2, { x: a2.x + 90, y: a2.y - 140 });
 await p.waitForTimeout(900);
