@@ -2,6 +2,7 @@
 
 import { useSyncExternalStore } from "react";
 import { AJUSTES_POR_DEFECTO } from "../db";
+import { ARMADO_DEMO, esDemo } from "../demo";
 import { guardarAjustes, leerAjustes } from "./ajustes";
 import type { Espacio, Intensidad, Nivel, Objetivo, TipoSesion } from "../tipos";
 
@@ -31,6 +32,11 @@ function emitir() {
 export async function cargarArmado(): Promise<void> {
   if (cargado) return;
   cargado = true;
+  if (esDemo()) {
+    estado = { ...ARMADO_DEMO };
+    emitir();
+    return;
+  }
   const a = await leerAjustes();
   estado = { ...a.ultimo, duracion: a.duracion[a.ultimo.tipo], espacio: a.espacio };
   emitir();

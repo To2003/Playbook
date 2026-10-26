@@ -13,6 +13,7 @@ import { cambiarArmado, cargarArmado, recordarArmado, useArmado } from "@/lib/es
 import { bibliotecaCompleta, guardarSesion, historialReciente } from "@/lib/estado/sesiones";
 import { marcarRecienArmada } from "@/lib/estado/transicion";
 import { useMovimientoReducido } from "@/lib/hooks/useMovimientoReducido";
+import { SEMILLA_DEMO, esDemo } from "@/lib/demo";
 import { generarSesion } from "@/lib/motor/generar";
 import type { BloqueSesion, Ejercicio, Intensidad, Nivel, Objetivo, Sesion, TipoSesion } from "@/lib/tipos";
 import { esPausa } from "@/lib/tipos";
@@ -78,8 +79,9 @@ export default function QueArmamos() {
   async function armar() {
     vibrar(10);
     const a = armado;
-    const [biblioteca, historial] = await Promise.all([bibliotecaCompleta(), historialReciente()]);
-    const semilla = (Date.now() ^ Math.floor(Math.random() * 0x7fffffff)) >>> 0;
+    const demo = esDemo();
+    const [biblioteca, historial] = await Promise.all([bibliotecaCompleta(), demo ? [] : historialReciente()]);
+    const semilla = demo ? SEMILLA_DEMO : (Date.now() ^ Math.floor(Math.random() * 0x7fffffff)) >>> 0;
     const sesion: Sesion = {
       ...generarSesion(
         { jugadores: a.jugadores, arqueros: a.arqueros, tipo: a.tipo, nivel: a.nivel, intensidad: a.intensidad, duracion: a.duracion, objetivo: a.objetivo, espacio: a.espacio, material },

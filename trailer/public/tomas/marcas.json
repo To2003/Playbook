@@ -1,0 +1,59 @@
+{
+  "armado": {
+    "archivo": "public/tomas/armado.mp4",
+    "duracion": 19.43,
+    "cuadrosReales": 580,
+    "marcas": {
+      "cuantos": {
+        "t": 0.58
+      },
+      "arquero": {
+        "t": 5.1
+      },
+      "queArmamos": {
+        "t": 7.27
+      },
+      "toqueArmame": {
+        "t": 10.43
+      },
+      "tuSesion": {
+        "t": 13.15
+      },
+      "swipe": {
+        "t": 16.48
+      },
+      "finSwipe": {
+        "t": 19.51
+      }
+    }
+  },
+  "pizarra": {
+    "archivo": "public/tomas/pizarra.mp4",
+    "duracion": 7.56,
+    "cuadrosReales": 232,
+    "marcas": {
+      "caja": {
+        "t": 0.09,
+        "caja": {
+          "x": 16,
+          "y": 164.39584350585938,
+          "width": 358,
+          "height": 223.75
+        }
+      }
+    }
+  },
+  "cancha": {
+    "archivo": "public/tomas/cancha.mp4",
+    "duracion": 7.07,
+    "cuadrosReales": 259,
+    "marcas": {
+      "inicio": {
+        "t": -0.04
+      },
+      "tiempo": {
+        "t": 5.51
+      }
+    }
+  }
+}
