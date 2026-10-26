@@ -15,8 +15,6 @@ const nextConfig: NextConfig = {
   devIndicators: false,
   env: {
     NEXT_PUBLIC_APP_VERSION: version(),
-    // Vercel Web Analytics solo existe en Vercel: afuera, el script daría 404.
-    NEXT_PUBLIC_ANALYTICS: process.env.VERCEL ? "1" : "",
   },
 };
 

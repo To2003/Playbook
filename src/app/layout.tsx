@@ -32,7 +32,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
     <html lang="es-AR" data-tema="oscuro" className={`${archivo.variable} antialiased`} suppressHydrationWarning>
       <body className="min-h-dvh">
         <Proveedores>{children}</Proveedores>
-        {process.env.NEXT_PUBLIC_ANALYTICS && <Analytics />}
+        <Analytics />
       </body>
     </html>
   );
