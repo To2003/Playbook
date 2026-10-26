@@ -24,6 +24,7 @@ const ENTRIES: Entries = {
   sesiones: "entry.115",
   cancha: "entry.116",
   propios: "entry.117",
+  info: "entry.118",
 };
 const TECNICO: Tecnico = { version: "71542f9", dispositivo: "Android · Chrome 141", pwa: true, sesiones: 7, cancha: 3, propios: 2 };
 const completa = (): Respuesta => ({
@@ -61,9 +62,11 @@ describe("feedback: armado del body", () => {
   it("cada campo va con su entry, recortado, y los vacíos no viajan", () => {
     const r = { ...completa(), falto: "", contacto: "" };
     const cuerpo = armarCuerpo(r, TECNICO, ENTRIES, "Rondo 3 contra 1");
-    expect(cuerpo.get("entry.101")).toBe("Juveniles, Mayores");
+    // Casillas: un parámetro por categoría marcada.
+    expect(cuerpo.getAll("entry.101")).toEqual(["Juveniles", "Mayores"]);
     expect(cuerpo.get("entry.102")).toBe("2–3");
-    expect(cuerpo.get("entry.103")).toBe("4 · Casi tal cual");
+    // Escala lineal: solo el número.
+    expect(cuerpo.get("entry.103")).toBe("4");
     expect(cuerpo.get("entry.104")).toBe("No se entiende quién rota");
     expect(cuerpo.get("entry.105")).toBe("Rondo 3 contra 1 (rondo-3-contra-1)");
     expect(cuerpo.get("entry.107")).toBe("Sí");
@@ -74,6 +77,42 @@ describe("feedback: armado del body", () => {
     expect(cuerpo.has("entry.106")).toBe(false);
     expect(cuerpo.has("entry.109")).toBe(false);
     expect(cuerpo.has("entry.110")).toBe(false);
+  });
+
+  it("info junta origen, calificación del cierre e info técnica en un solo texto", () => {
+    const cuerpo = armarCuerpo({ ...respuestaVacia("cierre"), calificacion: 4 }, TECNICO, ENTRIES);
+    expect(cuerpo.get("entry.118")).toBe("Desde: cierre · Calificación de la sesión: 4/5 · v71542f9 · Android · Chrome 141 · instalada · 7 sesiones · 3 veces en modo cancha · 2 ejercicios propios");
+  });
+
+  it("con el Form de la beta (10 preguntas) cada respuesta cae en su pregunta", () => {
+    const formBeta: Entries = {
+      categorias: "entry.614718372",
+      usos: "entry.1833832473",
+      tal_cual: "entry.488569987",
+      ejercicio_malo: "entry.789987621",
+      ejercicio: "entry.263847174",
+      falto: "entry.478530584",
+      seguiria: "entry.461666061",
+      por_que: "entry.2060276923",
+      contacto: "entry.172308889",
+      info: "entry.420581240",
+    };
+    const cuerpo = armarCuerpo(completa(), TECNICO, formBeta, "Rondo 3 contra 1");
+    expect(cuerpo.toString()).toBe(
+      [
+        "entry.614718372=Juveniles",
+        "entry.614718372=Mayores",
+        "entry.1833832473=2%E2%80%933",
+        "entry.488569987=4",
+        "entry.789987621=No+se+entiende+qui%C3%A9n+rota",
+        "entry.263847174=Rondo+3+contra+1+%28rondo-3-contra-1%29",
+        "entry.478530584=Ejercicios+de+c%C3%B3rner",
+        "entry.461666061=S%C3%AD",
+        "entry.2060276923=Me+ahorra+tiempo",
+        "entry.172308889=Caro%2C+Club+Atl%C3%A9tico",
+        `entry.420581240=${new URLSearchParams({ x: "Desde: inicio · v71542f9 · Android · Chrome 141 · instalada · 7 sesiones · 3 veces en modo cancha · 2 ejercicios propios" }).toString().slice(2)}`,
+      ].join("&"),
+    );
   });
 
   it("un campo sin entry configurado no se manda", () => {
@@ -164,7 +203,7 @@ describe("feedback: sin Google Form", () => {
     const url = (d.abrir as ReturnType<typeof vi.fn>).mock.calls[0][0] as string;
     expect(url.startsWith("https://wa.me/5491155550000?text=")).toBe(true);
     const texto = decodeURIComponent(url.split("text=")[1]);
-    expect(texto).toContain("¿La usaría tal cual?: 4 · Casi tal cual");
+    expect(texto).toContain("¿La usaría tal cual? (1 a 5): 4 · Casi tal cual");
     expect(texto).toContain("Ejercicio flojo: Rondo 3 contra 1 (rondo-3-contra-1)");
     expect(texto).toContain("Info técnica: v71542f9");
     expect(d.fetch).not.toHaveBeenCalled();
@@ -193,5 +232,14 @@ describe("feedback: contadores de uso", () => {
     await sumarContador(base, "cancha");
     await Promise.all([sumarContador(base, "propios"), sumarContador(base, "propios"), sumarContador(base, "propios")]);
     expect(await leerContadores(base)).toEqual({ sesiones: 2, cancha: 1, propios: 3 });
+  });
+});
+
+describe("feedback: textos", () => {
+  it("los contadores van en singular cuando es uno", () => {
+    const uno: Tecnico = { ...TECNICO, sesiones: 1, cancha: 1, propios: 1 };
+    const cuerpo = armarCuerpo(respuestaVacia("inicio"), uno, ENTRIES);
+    expect(cuerpo.get("entry.118")).toContain("1 sesión · 1 vez en modo cancha · 1 ejercicio propio");
+    expect(textoFeedback(respuestaVacia("inicio"), uno)).toContain("1 sesión · 1 vez en modo cancha · 1 ejercicio propio");
   });
 });

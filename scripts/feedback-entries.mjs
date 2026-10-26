@@ -1,7 +1,7 @@
 // Saca las variables del feedback desde el "vínculo prellenado" de Google Forms.
 // En el prellenado, escribí en cada pregunta el nombre de su campo (categorias, usos, tal_cual…).
 // Uso: node scripts/feedback-entries.mjs "https://docs.google.com/forms/d/e/XXXX/viewform?usp=pp_url&entry.123=categorias&…"
-const CAMPOS = ["categorias", "usos", "tal_cual", "ejercicio_malo", "ejercicio", "falto", "seguiria", "por_que", "contacto", "calificacion", "origen", "version", "dispositivo", "pwa", "sesiones", "cancha", "propios"];
+const CAMPOS = ["categorias", "usos", "tal_cual", "ejercicio_malo", "ejercicio", "falto", "seguiria", "por_que", "contacto", "calificacion", "origen", "version", "dispositivo", "pwa", "sesiones", "cancha", "propios", "info"];
 
 const link = process.argv[2];
 if (!link) {
@@ -14,7 +14,9 @@ for (const [clave, valor] of url.searchParams) {
   const campo = valor.trim().toLowerCase();
   if (/^entry\.\d+$/.test(clave) && CAMPOS.includes(campo)) entries[campo] = clave;
 }
-const faltan = CAMPOS.filter((c) => !entries[c]);
+// Con "info" (todo junto) no hacen falta las preguntas sueltas de origen, calificación e info técnica.
+const sueltos = ["calificacion", "origen", "version", "dispositivo", "pwa", "sesiones", "cancha", "propios"];
+const faltan = CAMPOS.filter((c) => !entries[c] && !(entries.info && sueltos.includes(c)) && !(c === "info" && sueltos.every((x) => entries[x])));
 const formResponse = `${url.origin}${url.pathname.replace(/\/viewform$/, "/formResponse")}`;
 console.log(`NEXT_PUBLIC_FEEDBACK_FORM_URL=${formResponse}`);
 console.log(`NEXT_PUBLIC_FEEDBACK_ENTRIES=${JSON.stringify(entries)}`);

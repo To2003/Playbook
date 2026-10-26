@@ -37,7 +37,11 @@ export interface Tecnico {
   propios: number;
 }
 
-/** Los campos que se mandan. Cada uno se mapea a un `entry.XXXX` del Google Form. */
+/**
+ * Los campos que se mandan. Cada uno se mapea a un `entry.XXXX` del Google Form; los que no tienen
+ * entry no viajan. `info` junta en un solo texto el origen, la calificación del cierre y la info
+ * técnica, para un Form con una sola pregunta para eso.
+ */
 export const CAMPOS = [
   "categorias",
   "usos",
@@ -56,6 +60,7 @@ export const CAMPOS = [
   "sesiones",
   "cancha",
   "propios",
+  "info",
 ] as const;
 export type Campo = (typeof CAMPOS)[number];
 export type Entries = Partial<Record<Campo, string>>;
@@ -72,12 +77,15 @@ export function faltantes(r: Respuesta): ("categorias" | "usos" | "tal_cual" | "
   return f;
 }
 
+const cuantos = (n: number, uno: string, varios: string) => `${n} ${n === 1 ? uno : varios}`;
+
 /** Cada campo como texto. Los vacíos quedan vacíos (no se mandan). */
 export function valores(r: Respuesta, t: Tecnico, nombreEjercicio?: string): Record<Campo, string> {
   return {
     categorias: r.categorias.join(", "),
     usos: r.usos ?? "",
-    tal_cual: r.talCual ? `${r.talCual} · ${ESCALA[r.talCual as 1 | 2 | 3 | 4 | 5]}` : "",
+    // Solo el número: es lo que acepta una pregunta de escala lineal (y una de texto también).
+    tal_cual: r.talCual ? String(r.talCual) : "",
     ejercicio_malo: r.ejercicioMalo.trim(),
     ejercicio: r.ejercicioId ? (nombreEjercicio ? `${nombreEjercicio} (${r.ejercicioId})` : r.ejercicioId) : "",
     falto: r.falto.trim(),
@@ -92,6 +100,18 @@ export function valores(r: Respuesta, t: Tecnico, nombreEjercicio?: string): Rec
     sesiones: String(t.sesiones),
     cancha: String(t.cancha),
     propios: String(t.propios),
+    info: [
+      `Desde: ${r.origen}`,
+      r.calificacion ? `Calificación de la sesión: ${r.calificacion}/5` : "",
+      `v${t.version}`,
+      t.dispositivo,
+      t.pwa ? "instalada" : "en el navegador",
+      cuantos(t.sesiones, "sesión", "sesiones"),
+      `${cuantos(t.cancha, "vez", "veces")} en modo cancha`,
+      cuantos(t.propios, "ejercicio propio", "ejercicios propios"),
+    ]
+      .filter(Boolean)
+      .join(" · "),
   };
 }
 
@@ -101,7 +121,10 @@ export function armarCuerpo(r: Respuesta, t: Tecnico, entries: Entries, nombreEj
   const cuerpo = new URLSearchParams();
   for (const campo of CAMPOS) {
     const entry = entries[campo];
-    if (entry && v[campo]) cuerpo.append(entry, v[campo]);
+    if (!entry) continue;
+    // Casillas de verificación: Google espera un parámetro por cada opción marcada.
+    if (campo === "categorias") r.categorias.forEach((c) => cuerpo.append(entry, c));
+    else if (v[campo]) cuerpo.append(entry, v[campo]);
   }
   return cuerpo;
 }
@@ -110,7 +133,7 @@ const RENGLONES: [Campo, string][] = [
   ["calificacion", "Cómo me fue con la sesión (1 a 5)"],
   ["categorias", "Categoría"],
   ["usos", "Veces que la usé en la cancha"],
-  ["tal_cual", "¿La usaría tal cual?"],
+  ["tal_cual", "¿La usaría tal cual? (1 a 5)"],
   ["ejercicio", "Ejercicio flojo"],
   ["ejercicio_malo", "Qué tenía de malo"],
   ["falto", "Qué me faltó"],
@@ -121,10 +144,10 @@ const RENGLONES: [Campo, string][] = [
 
 /** Las respuestas en texto, para mandar por WhatsApp o copiar. */
 export function textoFeedback(r: Respuesta, t: Tecnico, nombreEjercicio?: string): string {
-  const v = valores(r, t, nombreEjercicio);
+  const v = { ...valores(r, t, nombreEjercicio), tal_cual: r.talCual ? `${r.talCual} · ${ESCALA[r.talCual as 1 | 2 | 3 | 4 | 5]}` : "" };
   const lineas = ["Feedback de Playbook (beta)", ""];
   for (const [campo, etiqueta] of RENGLONES) if (v[campo]) lineas.push(`${etiqueta}: ${v[campo]}`);
-  lineas.push("", `Info técnica: v${t.version} · ${t.dispositivo} · ${t.pwa ? "instalada" : "en el navegador"} · ${t.sesiones} sesiones · ${t.cancha} veces en modo cancha · ${t.propios} ejercicios propios`);
+  lineas.push("", `Info técnica: v${t.version} · ${t.dispositivo} · ${t.pwa ? "instalada" : "en el navegador"} · ${cuantos(t.sesiones, "sesión", "sesiones")} · ${cuantos(t.cancha, "vez", "veces")} en modo cancha · ${cuantos(t.propios, "ejercicio propio", "ejercicios propios")}`);
   return lineas.join("\n");
 }
 

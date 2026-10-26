@@ -12,7 +12,7 @@ const salida = "capturas/feedback";
 mkdirSync(salida, { recursive: true });
 export const FORM = "https://docs.google.com/forms/d/e/1FAIpQLSprueba/formResponse";
 export const ENTRIES = Object.fromEntries(
-  ["categorias", "usos", "tal_cual", "ejercicio_malo", "ejercicio", "falto", "seguiria", "por_que", "contacto", "calificacion", "origen", "version", "dispositivo", "pwa", "sesiones", "cancha", "propios"].map((c, i) => [c, `entry.${1000 + i}`]),
+  ["categorias", "usos", "tal_cual", "ejercicio_malo", "ejercicio", "falto", "seguiria", "por_que", "contacto", "calificacion", "origen", "version", "dispositivo", "pwa", "sesiones", "cancha", "propios", "info"].map((c, i) => [c, `entry.${1000 + i}`]),
 );
 const campo = (cuerpo, c) => cuerpo.get(ENTRIES[c]);
 
@@ -97,7 +97,7 @@ await h.getByRole("button", { name: "Mandar" }).click();
 ok(await esperarEnvio(1), "manda al Google Form (POST interceptado)");
 const segundos = (Date.now() - t0) / 1000;
 const c1 = recibidos[0];
-ok(campo(c1, "categorias") === "Juveniles, Mayores" && campo(c1, "usos") === "2–3" && campo(c1, "tal_cual") === "4 · Casi tal cual" && campo(c1, "seguiria") === "Sí", "con las respuestas en sus entry");
+ok(c1.getAll(ENTRIES.categorias).join("|") === "Juveniles|Mayores" && campo(c1, "usos") === "2–3" && campo(c1, "tal_cual") === "4" && campo(c1, "seguiria") === "Sí", "con las respuestas en sus entry (casillas repetidas, escala con el número)");
 ok(campo(c1, "ejercicio") === "Rondo 3 contra 1 (rondo-3-contra-1)" && campo(c1, "contacto") === "Caro, Club Atlético" && campo(c1, "origen") === "inicio", "incluido el ejercicio elegido, el contacto y de dónde salió");
 ok(/^[0-9a-f]{7}$|^dev$/.test(campo(c1, "version") ?? "") && /^\w+ · Chrome \d+$/.test(campo(c1, "dispositivo") ?? "") && campo(c1, "pwa") === "No", `con la info técnica (v${campo(c1, "version")}, ${campo(c1, "dispositivo")})`);
 ok(await hoja().getByText("¡Gracias, crack!").isVisible() && (await hoja().getByText("Lo leemos todo.").isVisible()), `confirma “¡Gracias, crack! Lo leemos todo.” (${segundos.toFixed(1)} s con toques automáticos)`);
@@ -147,6 +147,7 @@ await p.getByRole("button", { name: "4 de 5" }).click();
 ok(await esperarEnvio(2), "la calificación rápida se manda sola");
 const c2 = recibidos[1];
 ok(campo(c2, "calificacion") === "4" && campo(c2, "origen") === "cierre" && !c2.has(ENTRIES.categorias), "con la nota y sin las preguntas del formulario");
+ok((campo(c2, "info") ?? "").startsWith("Desde: cierre · Calificación de la sesión: 4/5 · v"), `y en el campo de info: ${campo(c2, "info")}`);
 ok(campo(c2, "sesiones") === "1" && campo(c2, "cancha") === "1", `los contadores van en la info técnica (sesiones ${campo(c2, "sesiones")}, cancha ${campo(c2, "cancha")})`);
 ok(await p.getByText("¡Gracias, crack! Lo leemos todo.").isVisible(), "y agradece");
 await p.screenshot({ path: `${salida}/9-cierre-calificado-390.png` });

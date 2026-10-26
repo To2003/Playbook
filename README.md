@@ -52,31 +52,26 @@ Sin configurar nada, la app anda 100 % en el dispositivo: no hay login y "Compar
 La beta tiene un formulario de feedback (Inicio → "Contanos qué onda", Mi club → "Mandar feedback", el cierre del modo cancha y "Este ejercicio está flojo" en cada ficha). Las respuestas van a un **Google Form**, que las guarda en una Google Sheet: sin backend y sin tarjeta.
 
 1. En [forms.google.com](https://forms.google.com) creá un formulario nuevo, por ejemplo "Playbook · Feedback beta".
-2. Agregá **17 preguntas, todas de tipo "Respuesta corta"** (o "Párrafo" para las de texto largo) y **ninguna obligatoria**: la app ya valida, y la calificación rápida del cierre viaja sola. Los títulos son para vos; sugeridos, en este orden:
+2. Agregá estas **10 preguntas, en este orden y ninguna obligatoria** (la app ya valida, y la calificación rápida del cierre viaja sola: si Google tiene alguna obligatoria, esa respuesta se pierde). En las de opciones, **los textos tienen que ser exactamente estos**: si una opción no coincide, Google descarta la respuesta entera sin avisar.
 
-   | Campo | Título sugerido |
-   |---|---|
-   | `categorias` | Categoría que entrena |
-   | `usos` | Veces que la usó en la cancha |
-   | `tal_cual` | ¿Usaría la sesión tal cual? (1 a 5) |
-   | `ejercicio_malo` | Qué tenía de malo el ejercicio |
-   | `ejercicio` | Ejercicio flojo |
-   | `falto` | Qué le faltó |
-   | `seguiria` | ¿La seguiría usando? |
-   | `por_que` | Por qué |
-   | `contacto` | Nombre y club (opcional) |
-   | `calificacion` | Calificación de la sesión (cierre de cancha) |
-   | `origen` | Desde dónde lo mandó |
-   | `version` | Versión de la app |
-   | `dispositivo` | Dispositivo y navegador |
-   | `pwa` | ¿Instalada? |
-   | `sesiones` | Sesiones generadas |
-   | `cancha` | Veces en modo cancha |
-   | `propios` | Ejercicios propios creados |
+   | Campo | Pregunta | Tipo en Google Forms | Opciones (textuales) |
+   |---|---|---|---|
+   | `categorias` | ¿Qué categoría entrenás? | Casillas de verificación | `Menores`, `Juveniles`, `Mayores`, `Veteranos` |
+   | `usos` | ¿Cuántas veces la usaste en la cancha? | Opción múltiple | `0`, `1`, `2–3` (con guion largo), `4 o más` |
+   | `tal_cual` | ¿La sesión que te armó la usarías tal cual? | Escala lineal 1 a 5 | 1 = Ni loco, 5 = Tal cual |
+   | `ejercicio_malo` | ¿Algún ejercicio te pareció malo o mal explicado? | Párrafo | |
+   | `ejercicio` | ¿Cuál? | Respuesta corta | |
+   | `falto` | ¿Qué te faltó? | Párrafo | |
+   | `seguiria` | ¿La seguirías usando? | Opción múltiple | `Sí`, `No`, `Tal vez` |
+   | `por_que` | ¿Por qué? | Párrafo | |
+   | `contacto` | Tu nombre o apodo y club | Respuesta corta | |
+   | `info` | Info técnica | Párrafo | (la llena la app: desde dónde, calificación del cierre, versión, dispositivo y contadores) |
+
+   Si preferís columnas separadas para la info técnica, en vez de `info` podés crear preguntas de texto para `origen`, `calificacion`, `version`, `dispositivo`, `pwa`, `sesiones`, `cancha` y `propios`.
 
 3. En **Configuración**, apagá "Recopilar direcciones de correo electrónico" y "Restringir a usuarios de…": tiene que poder responder cualquiera sin iniciar sesión.
 4. En **Respuestas**, tocá "Vincular con Hojas de cálculo" para que todo caiga en una Sheet.
-5. Sacá los `entry.XXXX`: menú de los tres puntos → **"Obtener vínculo prellenado"**. En cada pregunta escribí **el nombre del campo** de la tabla (`categorias`, `usos`, `tal_cual`…), tocá "Obtener vínculo" y "Copiar vínculo".
+5. Sacá los `entry.XXXX`: menú de los tres puntos → **"Obtener vínculo prellenado"**. En cada pregunta de texto escribí **el nombre del campo** de la tabla (`ejercicio_malo`, `falto`, `info`…), marcá cualquier opción en las otras, tocá "Obtener vínculo" y "Copiar vínculo". (El script reconoce las de texto por el nombre; las de opciones, como `entry.123=Mayores`, se completan a mano en el JSON siguiendo el orden de la tabla.)
 6. Convertí ese link en las dos variables:
 
    ```bash
