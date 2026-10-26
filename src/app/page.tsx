@@ -3,9 +3,11 @@
 import Link from "next/link";
 import { useLiveQuery } from "dexie-react-hooks";
 import { PizarraSVG } from "@/components/pizarra/PizarraSVG";
-import { IconoBiblioteca, IconoClub, IconoFlecha, IconoMisEjercicios, IconoSeguir, Marca } from "@/components/iconos";
+import { Bienvenida } from "@/components/feedback/Bienvenida";
+import { IconoBiblioteca, IconoClub, IconoFlecha, IconoMensaje, IconoMisEjercicios, IconoSeguir, Marca } from "@/components/iconos";
 import { EJERCICIOS_BASE, ejercicioBase } from "@/data/biblioteca";
 import { db } from "@/lib/db";
+import { abrirFeedback } from "@/lib/feedback/cliente";
 import { useAjustes } from "@/lib/estado/ajustes";
 import { useBiblioteca, useSesionActual } from "@/lib/estado/sesiones";
 import { minutosTotales } from "@/lib/motor/generar";
@@ -38,6 +40,7 @@ export default function Inicio() {
 
       <main className="flex flex-1 flex-col gap-6 pb-[calc(124px+env(safe-area-inset-bottom))] pt-2">
         <h1 className="sr-only">Inicio</h1>
+        <Bienvenida />
 
         {sesion && ejercicioPortada ? (
           <section aria-labelledby="hoy">
@@ -101,6 +104,14 @@ export default function Inicio() {
                 </Link>
               </li>
             ))}
+            {/* Acceso secundario de la beta: más chico y apagado, no compite con "Arrancar entrenamiento". */}
+            <li className="border-t border-line">
+              <button type="button" onClick={() => abrirFeedback({ origen: "inicio" })} className="pressable flex h-14 w-full items-center gap-4 rounded-card px-1 text-left text-ink-muted">
+                <IconoMensaje tam={22} />
+                <span className="flex-1 text-label font-semibold">Contanos qué onda</span>
+                <span className="text-meta text-ink-faint">Beta</span>
+              </button>
+            </li>
           </ul>
         </nav>
       </main>

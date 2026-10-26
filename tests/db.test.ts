@@ -7,7 +7,7 @@ describe("PlaybookDB", () => {
     const base = new PlaybookDB("prueba-db");
     await base.ajustes.put({ ...AJUSTES_POR_DEFECTO, modoSol: true, clave: "yo" });
     expect((await base.ajustes.get("yo"))?.modoSol).toBe(true);
-    expect(base.tables.map((t) => t.name).sort()).toEqual(["ajustes", "cola", "ejercicios", "meta", "sesiones"]);
+    expect(base.tables.map((t) => t.name).sort()).toEqual(["ajustes", "cola", "ejercicios", "feedback", "meta", "sesiones"]);
     await base.delete();
   });
 });

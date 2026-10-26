@@ -6,6 +6,7 @@ import { useEffect, useRef, useState } from "react";
 import { TarjetaBloque } from "@/components/flujo/TarjetaBloque";
 import { BarraPasos } from "@/components/BarraPasos";
 import { IconoAgua, IconoDeslizar, IconoVolver } from "@/components/iconos";
+import { evento } from "@/lib/analytics";
 import { guardarSesion, historialReciente, useBiblioteca, useSesionActual } from "@/lib/estado/sesiones";
 import { consumirRecienArmada } from "@/lib/estado/transicion";
 import { Draggable, gsap, useGSAP } from "@/lib/gsap";
@@ -124,6 +125,7 @@ export default function SesionGenerada() {
     }
     setAviso(null);
     actualizar(r.sesion);
+    evento({ nombre: "dame_otro" });
     return true;
   }
 

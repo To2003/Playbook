@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import { evento } from "@/lib/analytics";
 import { compartirODescargar, svgAPng } from "@/lib/exportar/png";
 import type { Ejercicio } from "@/lib/tipos";
 import { Poster } from "./Poster";
@@ -20,6 +21,7 @@ export function BotonExportar({ e, className }: { e: Ejercicio; className?: stri
         await document.fonts.ready;
         const png = await svgAPng(svg.current!);
         const r = await compartirODescargar(png, e.nombre, e.nombre);
+        if (r !== "cancelado") evento({ nombre: "png_exportado" });
         if (vivo) setEstado(r === "cancelado" ? "quieto" : r);
       } catch (err) {
         console.warn("Exportar PNG:", err);

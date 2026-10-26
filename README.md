@@ -39,12 +39,61 @@ El celu tiene que entrar por `localhost` o por HTTPS para instalar la app y usar
 | `BASE=http://localhost:3100 npm run e2e` | Lo mismo contra el build (`npm start -- -p 3100`), más la verificación final: 390 y 1440, sin señal y el video de los momentos firma |
 | `node e2e/nube-mock.mjs` | Login, sync y compartir contra un Supabase simulado. Requiere el server levantado con `NEXT_PUBLIC_SUPABASE_URL=https://prueba.supabase.test NEXT_PUBLIC_SUPABASE_ANON_KEY=anon-de-prueba` |
 | `node e2e/rendimiento.mjs` | Cuadros por segundo con la CPU frenada 4× |
+| `node e2e/feedback.mjs` | Formulario de feedback contra un Google Form simulado. Requiere el build con `NEXT_PUBLIC_FEEDBACK_FORM_URL` y `NEXT_PUBLIC_FEEDBACK_ENTRIES` de prueba (ver el encabezado del archivo) |
 | `sh scripts/probar-rls.sh` | Corre la migración y las pruebas de RLS en un Postgres local (con `PGHOST`/`PGPORT`) |
 | `npm run capturas` | Capturas de pantalla a 390 px |
 
 ## La cuenta (opcional)
 
 Sin configurar nada, la app anda 100 % en el dispositivo: no hay login y "Compartir link" pide iniciar sesión. Para activar el login con Google, la sincronización y los links públicos, copiá `.env.example` a `.env.local` y seguí los pasos de la sección "Activar Supabase" de [`REPORTE.md`](REPORTE.md).
+
+## Feedback
+
+La beta tiene un formulario de feedback (Inicio → "Contanos qué onda", Mi club → "Mandar feedback", el cierre del modo cancha y "Este ejercicio está flojo" en cada ficha). Las respuestas van a un **Google Form**, que las guarda en una Google Sheet: sin backend y sin tarjeta.
+
+1. En [forms.google.com](https://forms.google.com) creá un formulario nuevo, por ejemplo "Playbook · Feedback beta".
+2. Agregá **17 preguntas, todas de tipo "Respuesta corta"** (o "Párrafo" para las de texto largo) y **ninguna obligatoria**: la app ya valida, y la calificación rápida del cierre viaja sola. Los títulos son para vos; sugeridos, en este orden:
+
+   | Campo | Título sugerido |
+   |---|---|
+   | `categorias` | Categoría que entrena |
+   | `usos` | Veces que la usó en la cancha |
+   | `tal_cual` | ¿Usaría la sesión tal cual? (1 a 5) |
+   | `ejercicio_malo` | Qué tenía de malo el ejercicio |
+   | `ejercicio` | Ejercicio flojo |
+   | `falto` | Qué le faltó |
+   | `seguiria` | ¿La seguiría usando? |
+   | `por_que` | Por qué |
+   | `contacto` | Nombre y club (opcional) |
+   | `calificacion` | Calificación de la sesión (cierre de cancha) |
+   | `origen` | Desde dónde lo mandó |
+   | `version` | Versión de la app |
+   | `dispositivo` | Dispositivo y navegador |
+   | `pwa` | ¿Instalada? |
+   | `sesiones` | Sesiones generadas |
+   | `cancha` | Veces en modo cancha |
+   | `propios` | Ejercicios propios creados |
+
+3. En **Configuración**, apagá "Recopilar direcciones de correo electrónico" y "Restringir a usuarios de…": tiene que poder responder cualquiera sin iniciar sesión.
+4. En **Respuestas**, tocá "Vincular con Hojas de cálculo" para que todo caiga en una Sheet.
+5. Sacá los `entry.XXXX`: menú de los tres puntos → **"Obtener vínculo prellenado"**. En cada pregunta escribí **el nombre del campo** de la tabla (`categorias`, `usos`, `tal_cual`…), tocá "Obtener vínculo" y "Copiar vínculo".
+6. Convertí ese link en las dos variables:
+
+   ```bash
+   node scripts/feedback-entries.mjs "https://docs.google.com/forms/d/e/…/viewform?usp=pp_url&entry.…"
+   ```
+
+   Imprime `NEXT_PUBLIC_FEEDBACK_FORM_URL` (la misma dirección, terminada en `/formResponse`) y `NEXT_PUBLIC_FEEDBACK_ENTRIES` (el JSON con el `entry.XXXX` de cada campo). Si preferís hacerlo a mano: cada `entry.123=categorias` del link es `"categorias": "entry.123"`.
+7. Pegalas en `.env.local` (ver `.env.example`) y en Vercel (*Settings → Environment Variables*, Production y Preview). Volvé a hacer el deploy: las variables se leen al compilar.
+8. Opcional, el plan B: `NEXT_PUBLIC_FEEDBACK_WHATSAPP` con tu número (código de país, sin "+"). Si el Form no está configurado, "Mandar" abre WhatsApp con las respuestas escritas; si tampoco hay número, las copia al portapapeles.
+
+Sin señal, la respuesta queda guardada en el celu y sale sola cuando vuelve la conexión. Con cada respuesta va info técnica (versión, dispositivo y navegador resumidos, si está instalada y contadores de uso), nada personal.
+
+La app manda el POST con `mode: "no-cors"`: Google no deja leer la respuesta, así que se cuenta como enviado si el pedido sale. Para probar que llega, mandá uno de prueba y mirá la Sheet.
+
+### Analytics
+
+Con el deploy en Vercel se activa Vercel Web Analytics (sin cookies ni datos personales): activalo en el proyecto, en *Analytics*. Se registran `sesion_generada` (jugadores, nivel e intensidad), `modo_cancha_iniciado`, `modo_cancha_completado`, `dame_otro`, `ejercicio_creado`, `png_exportado` y `feedback_enviado`. Fuera de Vercel no se carga nada.
 
 ## Estructura
 

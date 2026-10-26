@@ -7,6 +7,7 @@ import { Cabecera } from "@/components/Cabecera";
 import { BotonExportar } from "@/components/exportar/BotonExportar";
 import { AccionesFicha } from "@/components/ficha/AccionesFicha";
 import { BotonCompartir } from "@/components/nube/BotonCompartir";
+import { abrirFeedback } from "@/lib/feedback/cliente";
 import { FichaEjercicio } from "@/components/ficha/FichaEjercicio";
 import { useBiblioteca } from "@/lib/estado/sesiones";
 
@@ -32,6 +33,9 @@ function Ficha() {
                 <>
                   <BotonExportar e={e} />
                   <BotonCompartir e={e} />
+                  <button type="button" onClick={() => abrirFeedback({ origen: "ficha", ejercicioId: e.id })} className="pressable h-12 rounded-card px-3 text-label font-semibold text-ink-muted underline-offset-4 hover:underline">
+                    Este ejercicio está flojo
+                  </button>
                 </>
               } />} />
       ) : (

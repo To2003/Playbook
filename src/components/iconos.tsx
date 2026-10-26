@@ -173,3 +173,9 @@ export const IconoRehacer = (p: P) => (
     <path d="M20 9H10a6 6 0 000 12h3" />
   </Base>
 );
+export const IconoMensaje = (p: P) => (
+  <Base {...p}>
+    <path d="M5 5h14a1 1 0 011 1v9a1 1 0 01-1 1h-8l-4 3.5V16H5a1 1 0 01-1-1V6a1 1 0 011-1z" />
+    <path d="M8 9.5h8M8 12.5h5" />
+  </Base>
+);

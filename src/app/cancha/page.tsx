@@ -6,7 +6,10 @@ import { Suspense, useEffect, useRef, useState } from "react";
 import { PizarraAnimada } from "@/components/pizarra/PizarraAnimada";
 import { IconoAgua, IconoArquero, IconoCerrar, IconoLuna, IconoPausa, IconoSol } from "@/components/iconos";
 import { type EstadoCancha, anterior, duracionMs, empezar, enPausa, mmss, pausar, reanudar, restante, siguiente } from "@/lib/cancha/cronometro";
+import { CierreCancha } from "@/components/feedback/CierreCancha";
+import { evento } from "@/lib/analytics";
 import { guardarAjustes, useAjustes } from "@/lib/estado/ajustes";
+import { contar } from "@/lib/feedback/cliente";
 import { useBiblioteca, useSesion } from "@/lib/estado/sesiones";
 import { gsap } from "@/lib/gsap";
 import { useWakeLock } from "@/lib/hooks/useWakeLock";
@@ -66,6 +69,25 @@ function Cancha({ sesion, biblioteca, sol }: { sesion: Sesion; biblioteca: Ejerc
 
   useWakeLock(!estado.completa);
 
+  // Uso del modo cancha (contador del feedback y analytics): una vez por sesión, aunque se vuelva de la ficha.
+  useEffect(() => {
+    const una = (clave: string, f: () => void) => {
+      try {
+        if (sessionStorage.getItem(clave)) return;
+        sessionStorage.setItem(clave, "1");
+      } catch {
+        // Sin almacenamiento: se cuenta igual.
+      }
+      f();
+    };
+    if (!estado.completa)
+      una(`pb-cancha-iniciado-${sesion.id}`, () => {
+        contar("cancha");
+        evento({ nombre: "modo_cancha_iniciado" });
+      });
+    else una(`pb-cancha-completado-${sesion.id}`, () => evento({ nombre: "modo_cancha_completado" }));
+  }, [estado.completa, sesion.id]);
+
   useEffect(() => {
     try {
       localStorage.setItem(claveProgreso(sesion.id), JSON.stringify(estado));
@@ -111,23 +133,14 @@ function Cancha({ sesion, biblioteca, sol }: { sesion: Sesion; biblioteca: Ejerc
 
   if (estado.completa) {
     return (
-      <div data-mode="cancha" data-sol={sol} className="grid min-h-dvh place-items-center bg-ground p-6">
-        <div className="w-full max-w-[480px]">
-          <p className="marcador text-[5rem]">¡Terminó!</p>
-          <p className="mt-3 text-[1.5rem] font-semibold">Buen entrenamiento. Elongá y a la ducha.</p>
-          <button
-            type="button"
-            onClick={() => {
-              localStorage.removeItem(claveProgreso(sesion.id));
-              if (document.fullscreenElement) void document.exitFullscreen().catch(() => {});
-              router.push("/");
-            }}
-            className="pressable btn-primary mt-8 h-[88px] w-full text-[1.5rem]"
-          >
-            Volver al inicio
-          </button>
-        </div>
-      </div>
+      <CierreCancha
+        sol={sol}
+        onInicio={() => {
+          localStorage.removeItem(claveProgreso(sesion.id));
+          if (document.fullscreenElement) void document.exitFullscreen().catch(() => {});
+          router.push("/");
+        }}
+      />
     );
   }
 

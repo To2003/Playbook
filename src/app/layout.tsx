@@ -1,6 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import localFont from "next/font/local";
 import "./globals.css";
+import { Analytics } from "@vercel/analytics/next";
 import { Proveedores } from "@/components/Proveedores";
 
 // Archivo variable (ejes wdth 62–125 y wght 100–900), servida desde la app: anda sin señal.
@@ -31,6 +32,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
     <html lang="es-AR" data-tema="oscuro" className={`${archivo.variable} antialiased`} suppressHydrationWarning>
       <body className="min-h-dvh">
         <Proveedores>{children}</Proveedores>
+        {process.env.NEXT_PUBLIC_ANALYTICS && <Analytics />}
       </body>
     </html>
   );

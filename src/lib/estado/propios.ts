@@ -1,6 +1,8 @@
 "use client";
 
 import { db } from "../db";
+import { evento } from "../analytics";
+import { contar } from "../feedback/cliente";
 import { encolar } from "../sync/cola";
 import type { Ejercicio } from "../tipos";
 
@@ -13,7 +15,12 @@ export function nuevoId(): string {
 
 export async function guardarPropio(e: Ejercicio): Promise<Ejercicio> {
   const guardado = { ...e, autor: e.autor === "base" ? AUTOR_LOCAL : e.autor, actualizado: Date.now() };
+  const nuevo = !(await db().ejercicios.get(e.id));
   await db().ejercicios.put(guardado);
+  if (nuevo) {
+    contar("propios");
+    evento({ nombre: "ejercicio_creado" });
+  }
   await encolar("ejercicios", guardado.id);
   return guardado;
 }

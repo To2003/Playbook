@@ -1,10 +1,11 @@
 "use client";
 
 import { Cabecera } from "@/components/Cabecera";
-import { IconoMas, IconoMenos } from "@/components/iconos";
+import { IconoMas, IconoMenos, IconoMensaje } from "@/components/iconos";
 import { Segmentado } from "@/components/Segmentado";
 import { DURACIONES } from "@/lib/duraciones";
 import { guardarAjustes, useAjustes } from "@/lib/estado/ajustes";
+import { abrirFeedback } from "@/lib/feedback/cliente";
 import { NOMBRE_ESPACIO, NOMBRE_TIPO, hora } from "@/lib/nombres";
 import { NUBE_ACTIVA, cerrarSesion, iniciarSesion, sincronizarAhora, useCuenta, useEstadoSync } from "@/lib/nube/cuenta";
 import type { Ajustes, Espacio, Material, TipoSesion } from "@/lib/tipos";
@@ -85,6 +86,13 @@ export default function MiClub() {
 
           <Bloque titulo="Cuenta">
             <Cuenta />
+          </Bloque>
+
+          <Bloque titulo="Beta">
+            <button type="button" onClick={() => abrirFeedback({ origen: "mi-club" })} className="pressable flex h-12 items-center gap-3 self-start rounded-card px-1 font-semibold underline-offset-4 hover:underline">
+              <IconoMensaje tam={22} className="text-ink-muted" />
+              Mandar feedback
+            </button>
           </Bloque>
 
           <Bloque titulo="Tema">

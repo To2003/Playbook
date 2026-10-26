@@ -13,7 +13,9 @@ import { cambiarArmado, cargarArmado, recordarArmado, useArmado } from "@/lib/es
 import { bibliotecaCompleta, guardarSesion, historialReciente } from "@/lib/estado/sesiones";
 import { marcarRecienArmada } from "@/lib/estado/transicion";
 import { useMovimientoReducido } from "@/lib/hooks/useMovimientoReducido";
+import { evento } from "@/lib/analytics";
 import { SEMILLA_DEMO, esDemo } from "@/lib/demo";
+import { contar } from "@/lib/feedback/cliente";
 import { generarSesion } from "@/lib/motor/generar";
 import type { BloqueSesion, Ejercicio, Intensidad, Nivel, Objetivo, Sesion, TipoSesion } from "@/lib/tipos";
 import { esPausa } from "@/lib/tipos";
@@ -93,6 +95,8 @@ export default function QueArmamos() {
       id: crypto.randomUUID(),
     };
     await Promise.all([guardarSesion(sesion), recordarArmado(a)]);
+    contar("sesiones");
+    evento({ nombre: "sesion_generada", datos: { jugadores: a.jugadores, nivel: a.nivel, intensidad: a.intensidad } });
     marcarRecienArmada(sesion.id);
     if (reducido) {
       router.push("/sesion");

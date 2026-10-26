@@ -17,7 +17,16 @@ export interface FilaAjustes extends Ajustes {
   actualizado?: number;
 }
 
-/** Datos internos del dispositivo: marcas de sincronización por usuario. */
+/** Una respuesta de feedback que no se pudo mandar (sin señal): se manda sola cuando vuelve. */
+export interface FeedbackPendiente {
+  id?: number;
+  url: string;
+  /** El body ya armado (URLSearchParams como texto). */
+  cuerpo: string;
+  creado: number;
+}
+
+/** Datos internos del dispositivo: marcas de sincronización y contadores de uso. */
 export interface FilaMeta {
   clave: string;
   valor: number;
@@ -33,6 +42,7 @@ export class PlaybookDB extends Dexie {
   ajustes!: EntityTable<FilaAjustes, "clave">;
   cola!: EntityTable<CambioPendiente, "id">;
   meta!: EntityTable<FilaMeta, "clave">;
+  feedback!: EntityTable<FeedbackPendiente, "id">;
 
   constructor(nombre = "playbook") {
     super(nombre);
@@ -43,6 +53,7 @@ export class PlaybookDB extends Dexie {
       cola: "++id, tabla, claveId",
     });
     this.version(2).stores({ meta: "clave" });
+    this.version(3).stores({ feedback: "++id, creado" });
   }
 }
 
